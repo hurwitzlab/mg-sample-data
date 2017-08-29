@@ -1,0 +1,3 @@
+genome_id	genome_name	taxon_id	genome_length	genome_status	chromosomes	plasmids	contigs	patric_cds	refseq_cds
+1590.467	Lactobacillus plantarum strain LP2	1590	3284622	Complete	1			3194	
+1661053.3	Pseudomonas sp. NBRC 111138	1661053	6062879	WGS			195	5703	
