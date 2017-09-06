@@ -31,13 +31,13 @@ echo Started $(date)
 #Otherwise use -O switch to redirect to a different, previously created, dir
 #Full command parameters at end of script
 
-alias fastqc="singularity exec $SING_IMG/fastqc.img fastqc"
+export fastqc="singularity exec $SING_IMG/fastqc.img fastqc"
 
 echo "Running fastqc on dna"
-fastqc -f fastq --extract $DNA 
+$fastqc -f fastq --extract $DNA 
 
 echo "Running fastqc on rna"
-fastqc -f fastq --extract $RNA
+$fastqc -f fastq --extract $RNA
 
 echo Finished $(date)
 
