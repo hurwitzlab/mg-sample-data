@@ -18,9 +18,10 @@ module load singularity
 # --------------------------------------------------
 
 # IMPORTANT VARIABLES YOU NEED TO SET, YES YOU! 
-export DNA="/rsgrps/bhurwitz/scottdaniel/mg-sample-data/dna/*"
-export RNA="/rsgrps/bhurwitz/scottdaniel/mg-sample-data/rna/*"
+export DNA="/dna/*"
+export RNA="/rna/*"
 export SING_IMG="/rsgrps/bhurwitz/scottdaniel/singularity-images"
+export BIND="/rsgrps/bhurwitz/scottdaniel/mg-sample-data"
 
 set -u
 
@@ -31,7 +32,7 @@ echo Started $(date)
 #Otherwise use -O switch to redirect to a different, previously created, dir
 #Full command parameters at end of script
 
-export fastqc="singularity exec $SING_IMG/fastqc.img fastqc"
+export fastqc="singularity exec -B $BIND:/home --pwd /home $SING_IMG/fastqc.img fastqc"
 
 echo "Running fastqc on dna"
 $fastqc -f fastq --extract $DNA 
