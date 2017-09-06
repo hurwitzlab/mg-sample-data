@@ -102,3 +102,4 @@ ENV/
 *.[eo]*
 *.zip
 *.html
+*trimmed*

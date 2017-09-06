@@ -38,12 +38,12 @@ export solexaqa="singularity run \
 
 echo "Running solexaqa on dna"
 for file in $(ls $DNA); do
-    $solexaqa dynamictrim /work/$DNA/$file
+    $solexaqa dynamictrim /work/$DNA/$file --illumina
 done
 
 echo "Running solexaqa on rna"
 for file in $(ls $RNA); do
-    $solexaqa dynamictrim /work/$RNA/$file
+    $solexaqa dynamictrim /work/$RNA/$file --illumina
 done
 
 echo Finished $(date)
