@@ -7,6 +7,7 @@
 #PBS -l cput=24:00:00
 #PBS -M scottdaniel@email.arizona.edu
 #PBS -m ea
+#PBS -j oe
 
 #
 # runs singularity fastqc.img to generate fastqc reports
@@ -18,10 +19,12 @@ module load singularity
 # --------------------------------------------------
 
 # IMPORTANT VARIABLES YOU NEED TO SET, YES YOU! 
-export DNA="/dna/*"
-export RNA="/rna/*"
 export SING_IMG="/rsgrps/bhurwitz/scottdaniel/singularity-images"
 export BIND="/rsgrps/bhurwitz/scottdaniel/mg-sample-data"
+export DNA="dna"
+export RNA="rna"
+
+cd $BIND
 
 set -u
 
@@ -32,16 +35,21 @@ echo Started $(date)
 #Otherwise use -O switch to redirect to a different, previously created, dir
 #Full command parameters at end of script
 
-export fastqc="singularity exec -B $BIND:/home --pwd /home $SING_IMG/fastqc.img fastqc"
+export fastqc="singularity exec \
+    -B $BIND:/work \
+    $SING_IMG/fastqc.img fastqc" 
 
 echo "Running fastqc on dna"
-$fastqc -f fastq --extract $DNA 
+for file in $(ls $DNA); do
+    $fastqc --extract /work/$DNA/$file
+done
 
 echo "Running fastqc on rna"
-$fastqc -f fastq --extract $RNA
+for file in $(ls $RNA); do
+    $fastqc --extract /work/$RNA/$file
+done
 
 echo Finished $(date)
-
 
 #
 # FastQC - A high throughput sequence QC analysis tool
