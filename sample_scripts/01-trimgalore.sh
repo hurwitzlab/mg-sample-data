@@ -39,7 +39,7 @@ export trim_galore="singularity exec \
 echo "Running trim_galore on dna"
 for file in $(ls $DNA/*R1.fastq); do
     PREFIX="/work/$DNA"
-    R1=$file
+    R1=$(basename $file)
     R2=$(basename $file R1.fastq)R2.fastq
     $trim_galore --paired --fastqc -o $PREFIX $PREFIX/$R1 $PREFIX/$R2 
 done
@@ -47,7 +47,7 @@ done
 echo "Running trim_galore on rna"
 for file in $(ls $RNA/*R1.fastq); do
     PREFIX="/work/$RNA"
-    R1=$file
+    R1=$(basename $file)
     R2=$(basename $file R1.fastq)R2.fastq
     $trim_galore --paired --fastqc -o $PREFIX $PREFIX/$R1 $PREFIX/$R2
 done
