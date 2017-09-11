@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+
+#PBS -W group_list=bhurwitz
+#PBS -q standard
+#PBS -l select=1:ncpus=2:mem=4gb
+#PBS -l walltime=24:00:00
+#PBS -l cput=24:00:00
+#PBS -M scottdaniel@email.arizona.edu
+#PBS -m ea
+#PBS -j oe
+
+# need a script to cat all the genomes i think
+# something like:
+# find ./$GENOME_DIR -iname *.fna -print0 | xargs -I file -0 cat file > $TMP/bigun.fna
+# split $TMP/bigun > ./ into like 4GB pieces with destination being bowtie2index dir
+#
+set -u
+
+if [ ! -e ./config.sh ]; then
+    . ./config.sh
+else
+    echo "No config file! ermagod!"
+    exit 1
+fi
+
+cd $GENOME_DIR
+
+if [ ! -d $BT2_DIR ]; then
+    mkdir -p $BT2_DIR
+fi
+
+find ./$GENOME_DIR -iname *.fna -print0 | xargs -I file -0 cat file > $TMP/bigun.fna
+split $TMP/bigun > $BT2_DIR
+
+echo done $(date)

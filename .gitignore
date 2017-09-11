@@ -104,3 +104,5 @@ ENV/
 *.html
 *trimmed*
 *fastqc/
+*val*
+*trimming*
