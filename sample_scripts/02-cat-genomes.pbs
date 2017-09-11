@@ -44,8 +44,6 @@ cd $BT2_DIR
 #remove leftover crap (see comment about suboptimal)
 rm *.flat && rm *.gdx && rm patric.fa
 
-
-
 echo done $(date)
 
 ##
