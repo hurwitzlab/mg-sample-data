@@ -3,8 +3,8 @@
 #PBS -W group_list=bhurwitz
 #PBS -q standard
 #PBS -l select=1:ncpus=2:mem=4gb
-#PBS -l walltime=24:00:00
-#PBS -l cput=24:00:00
+#PBS -l walltime=00:10:00
+#PBS -l cput=00:10:00
 #PBS -M scottdaniel@email.arizona.edu
 #PBS -m ea
 #PBS -j oe
@@ -16,11 +16,15 @@
 #
 set -u
 
-if [ ! -e ./config.sh ]; then
-    . ./config.sh
+cd $PBS_O_WORKDIR
+
+CONFIG="./config.sh"
+
+if [ -e $CONFIG ]; then
+    . "$CONFIG"
 else
-    echo "No config file! ermagod!"
-    exit 1
+    echo Missing config \"$CONFIG\" ermagod!
+    exit 12345
 fi
 
 cd $GENOME_DIR
@@ -29,7 +33,81 @@ if [ ! -d $BT2_DIR ]; then
     mkdir -p $BT2_DIR
 fi
 
-find ./$GENOME_DIR -iname *.fna -print0 | xargs -I file -0 cat file > $TMP/bigun.fna
-split $TMP/bigun > $BT2_DIR
+find $GENOME_DIR -iname "*.fna" -print0 | xargs -0 -I file cat file > $BT2_DIR/patric.fa
+cd $BT2_DIR
+#nope split will break apart genomes, dont want!
+#split -e -d -n l/2 /tmp/bigun.fna patric
+
+#this may be suboptimal
+~/anaconda2/bin/pyfasta split -n 2 $BT2_DIR/patric.fa
+
+#remove leftover crap (see comment about suboptimal)
+rm *.flat && rm *.gdx && rm patric.fa
+
+
 
 echo done $(date)
+
+##
+#split [OPTION]... [INPUT [PREFIX]]
+#
+#DESCRIPTION
+#       Output fixed-size pieces of INPUT to PREFIXaa, PREFIXab, ...; default
+#       size is 1000 lines, and default PREFIX is ‘x’.   With  no  INPUT,  or
+#       when INPUT is -, read standard input.
+#
+#       Mandatory  arguments  to long options are mandatory for short options
+#       too.
+#
+#       -a, --suffix-length=N
+#              use suffixes of length N (default 2)
+#
+#       -b, --bytes=SIZE
+#              put SIZE bytes per output file
+#
+#       -C, --line-bytes=SIZE
+#              put at most SIZE bytes of lines per output file
+#
+#       -d, --numeric-suffixes
+#              use numeric suffixes instead of alphabetic
+#
+#       -e, --elide-empty-files
+#              do not generate empty output files with ‘-n’
+#
+#       -l, --lines=NUMBER
+#              put NUMBER lines per output file
+#
+#       -n, --number=CHUNKS
+#              generate CHUNKS output files.  See below
+#
+#       -u, --unbuffered
+#              immediately copy input to output with ‘-n r/...’
+#
+#              do not generate empty output files with ‘-n’
+#
+#       -l, --lines=NUMBER
+#              put NUMBER lines per output file
+#
+#       -n, --number=CHUNKS
+#              generate CHUNKS output files.  See below
+#
+#       -u, --unbuffered
+#              immediately copy input to output with ‘-n r/...’
+#
+#       --verbose
+#              print a diagnostic just before each output file is opened
+#
+#       --help display this help and exit
+#
+#       --version
+#              output version information and exit
+#
+#       SIZE may be (or may be an integer optionally followed by) one of fol-
+#       lowing:  KB 1000, K 1024, MB 1000*1000, M 1024*1024, and so on for G,
+#       T, P, E, Z, Y.
+#
+#       CHUNKS may be: N       split into N files based on size of input  K/N
+#       output  Kth  of N to stdout l/N     split into N files without split-
+#       ting lines l/K/N   output Kth of N to stdout without splitting  lines
+#       r/N      like  ‘l’  but use round robin distribution r/K/N   likewise
+#       but only output Kth of N to stdout
