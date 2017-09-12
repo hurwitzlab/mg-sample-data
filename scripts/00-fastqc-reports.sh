@@ -21,8 +21,6 @@ module load singularity
 # --------------------------------------------------
 cd $PRJ_DIR
 
-set -u
-
 export DNALIST="dna_fastq_file_list"
 export RNALIST="rna_fastq_file_list"
 
@@ -35,6 +33,7 @@ if [ -e $TODO ]; then
     rm $TODO
 fi
 
+echo "Checking if there are existing fastqc reports for dna"
 while read FASTQ; do
     
     if [ ! -e "$DNA_DIR/$(basename $FASTQ .fastq)_fastqc.html" ]; then
@@ -43,6 +42,7 @@ while read FASTQ; do
 
 done < $DNALIST
 
+echo "Checking if there are existing fastqc reports for rna"
 while read FASTQ; do
     
     if [ ! -e "$RNA_DIR/$(basename $FASTQ .fastq)_fastqc.html" ]; then

@@ -30,7 +30,7 @@ else
   exit 1
 fi
 
-cd $SRA_DIR
+cd $PRJ_DIR
 
 echo Host \"$(hostname)\"
 
@@ -50,18 +50,25 @@ else
 fi
 
 export trim_galore="singularity exec \
-    -B $SRA_DIR:$SING_WD \
+    -B $PRJ_DIR:$SING_WD \
     $SING_IMG/fastqc.img trim_galore" 
 
-cd $TRIMMED_DIR
-
-echo "Running trim_galore on dna"
-for file in $(cat $TMP_FILES); do
-    OUT_DIR=$SING_WD/$(basename $TRIMMED_DIR)
+echo "Running trim_galore on dna files, if any"
+for file in $(cat $TMP_FILES | grep "dna"); do
+    OUT_DIR=$SING_WD/dna
     R1=$(basename $file)
-    R2=$(basename $file _1.fastq.gz)_2.fastq.gz
+    R2=$(basename $file R1.fastq)R2.fastq
     $trim_galore --paired --fastqc_args "-o $OUT_DIR" \
-        -o $OUT_DIR $SING_WD/$R1 $SING_WD/$R2 
+        -o $OUT_DIR $SING_WD/dna/$R1 $SING_WD/dna/$R2 
+done
+
+echo "Running trim_galore on rna files, if any"
+for file in $(cat $TMP_FILES | grep "rna"); do
+    OUT_DIR=$SING_WD/rna
+    R1=$(basename $file)
+    R2=$(basename $file R1.fastq)R2.fastq
+    $trim_galore --paired --fastqc_args "-o $OUT_DIR" \
+        -o $OUT_DIR $SING_WD/rna/$R1 $SING_WD/rna/$R2 
 done
 
 echo Finished $(date)
