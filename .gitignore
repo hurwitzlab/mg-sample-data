@@ -107,3 +107,8 @@ ENV/
 *val*
 *trimming*
 bt2_indces/
+
+dna_fastq_file_list
+files_todo
+rna_fastq_file_list
+out/

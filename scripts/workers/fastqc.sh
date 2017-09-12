@@ -1,52 +1,74 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 #PBS -W group_list=bhurwitz
 #PBS -q standard
-#PBS -l select=1:ncpus=2:mem=4gb
-#PBS -l walltime=24:00:00
-#PBS -l cput=24:00:00
+#PBS -l select=1:ncpus=2:mem=3gb
+#PBS -l walltime=12:00:00
+#PBS -l cput=12:00:00
 #PBS -M scottdaniel@email.arizona.edu
 #PBS -m ea
 #PBS -j oe
 
-#
-# runs singularity fastqc.img to generate fastqc reports
-#
-
-# --------------------------------------------------
-# singularity is needed to run singularity images
-module load singularity
-# --------------------------------------------------
-
-# IMPORTANT VARIABLES YOU NEED TO SET, YES YOU! 
-export SING_IMG="/rsgrps/bhurwitz/scottdaniel/singularity-images"
-export BIND="/rsgrps/bhurwitz/scottdaniel/mg-sample-data"
-export DNA="dna"
-export RNA="rna"
-
-cd $BIND
-
-set -u
-
+#Fastqc will by default generate quality reports in the directory the input files reside in
+#Otherwise use -o switch to redirect to a different, previously created, dir
+#Full command parameters at end of script
 echo Host \"$(hostname)\"
 
 echo Started $(date)
-#Fastqc will by default generate quality reports in the directory the input files reside in
-#Otherwise use -O switch to redirect to a different, previously created, dir
-#Full command parameters at end of script
+
+unset module
+set -u
+
+COMMON="$WORKER_DIR/common.sh"
+
+if [ -e $COMMON ]; then
+  . "$COMMON"
+else
+  echo Missing common \"$COMMON\"
+  exit 1
+fi
+
+cd $PRJ_DIR
+
+TMP_FILES=$(mktemp)
+
+get_lines $TODO $TMP_FILES $PBS_ARRAY_INDEX $STEP_SIZE
+
+NUM_FILES=$(lc $TMP_FILES)
+
+if [[ $NUM_FILES -lt 1 ]]; then
+    echo Something went wrong or no files to process
+    exit 1
+else
+    echo Found \"$NUM_FILES\" files to process
+fi
 
 export fastqc="singularity exec \
-    -B $BIND:/work \
+    -B $PRJ_DIR:$SING_WD \
     $SING_IMG/fastqc.img fastqc" 
+#
+#echo "Running fastqc on dna"
+#for file in $(ls ./*.fastq); do
+#    $fastqc -o /work/qcreports --extract /work/$file
+#done
 
-echo "Running fastqc on dna"
-for file in $(ls $DNA); do
-    $fastqc --extract /work/$DNA/$file
+echo "Working on dna files, if any"
+for NAME in $(cat $TMP_FILES | grep "dna"); do     
+    BASE=$(basename $NAME)
+    echo Working on $BASE
+    if [ ! -e dna/$(basename $NAME .fastq)_fastqc.html ]; then
+        $fastqc -o $SING_WD/dna/ $SING_WD/dna/$BASE
+    fi
 done
 
-echo "Running fastqc on rna"
-for file in $(ls $RNA); do
-    $fastqc --extract /work/$RNA/$file
+echo "Working on rna files, if any"
+
+for NAME in $(cat $TMP_FILES | grep "rna"); do     
+    BASE=$(basename $NAME)
+    echo Working on $BASE
+    if [ ! -e rna/$(basename $NAME .fastq)_fastqc.html ]; then
+        $fastqc -o $SING_WD/rna/ $SING_WD/rna/$BASE
+    fi
 done
 
 echo Finished $(date)

@@ -3,10 +3,15 @@
 
 #singularity images to run programs
 export SING_IMG="/rsgrps/bhurwitz/scottdaniel/singularity-images"
+export SING_WD="/work"
 
 #main project directory and also where singularity images bind /work to
 export BIND="/rsgrps/bhurwitz/scottdaniel/mg-sample-data"
 export PRJ_DIR=$BIND
+
+#scripts and such
+export SCRIPT_DIR="$PRJ_DIR/scripts"
+export WORKER_DIR="$SCRIPT_DIR/workers"
 
 #dna and rna reads
 export DNA_DIR="$PRJ_DIR/dna"
