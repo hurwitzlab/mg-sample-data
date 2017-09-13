@@ -15,17 +15,13 @@ else
 fi
 
 export CWD="$PWD"
-export STEP_SIZE=2
+export STEP_SIZE=1
 
 PROG=`basename $0 ".sh"`
 STDOUT_DIR="$CWD/out/$PROG"
 
 init_dir "$STDOUT_DIR" 
 
-# --------------------------------------------------
-# singularity is needed to run singularity images
-module load singularity
-# --------------------------------------------------
 cd $PRJ_DIR
 
 export LIST="fna_list"
@@ -53,10 +49,10 @@ echo Found \"$NUM_FILES\" files in \"$BT2_DIR\" to work on
 JOB=$(qsub -J 1-$NUM_FILES:$STEP_SIZE -V -N bowtie2build -j oe -o "$STDOUT_DIR" $WORKER_DIR/bowtie2-build.sh)
 
 if [ $? -eq 0 ]; then
-  echo "Submitted job \"$JOB\" for you in steps of \"$STEP_SIZE.\" \n/
-  It is inhumane, in my opinion, to force people who have a genuine medical\n/
-  need for coffee to wait in line behind people who apparently view it as\n/
-  some kind of recreational activity.\n/
+  echo -e "Submitted job \"$JOB\" for you in steps of \"$STEP_SIZE.\"
+  It is inhumane, in my opinion, to force people who have a genuine medical
+  need for coffee to wait in line behind people who apparently view it as
+  some kind of recreational activity.
   ― Dave Barry"
 else
   echo -e "\nError submitting job\n$JOB\n"

@@ -58,7 +58,8 @@ cd $BT2_DIR
 echo "Running bowti2-build from within the singularity container"
 
 for file in $(cat $TMP_FILES); do
-    $bt2build $file $file
+    BASE=$(basename $file)
+    $bt2build $SING_WD/$BASE $SING_WD/$BASE
 done
 
 echo Finished $(date)

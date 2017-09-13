@@ -9,11 +9,13 @@
 #PBS -m ea
 #PBS -j oe
 
-# need a script to cat all the genomes i think
-# something like:
-# find ./$GENOME_DIR -iname *.fna -print0 | xargs -I file -0 cat file > $TMP/bigun.fna
-# split $TMP/bigun > ./ into like 4GB pieces with destination being bowtie2index dir
-#
+#################################
+#Needed for singularity images###
+                                #
+module load singularity         #
+                                #
+#################################
+
 set -u
 
 cd $PBS_O_WORKDIR
@@ -39,7 +41,11 @@ cd $BT2_DIR
 #split -e -d -n l/2 /tmp/bigun.fna patric
 
 #this may be suboptimal
-~/anaconda2/bin/pyfasta split -n 2 $BT2_DIR/patric.fa
+export pyfasta="singularity exec \
+    -B $BT2_DIR:$SING_WD \
+    $SING_IMG/bowcuff.img pyfasta"
+
+$pyfasta split -n 2 $SING_WD/patric.fa
 
 #remove leftover crap (see comment about suboptimal)
 rm *.flat && rm *.gdx && rm patric.fa
