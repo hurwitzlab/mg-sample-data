@@ -4,6 +4,8 @@
 #singularity images to run programs
 export SING_IMG="/rsgrps/bhurwitz/scottdaniel/singularity-images"
 export SING_WD="/work"
+export SING_BT2="/bt2"
+export SING_META="/metadata"
 
 #main project directory and also where singularity images bind /work to
 export BIND="/rsgrps/bhurwitz/scottdaniel/mg-sample-data"
