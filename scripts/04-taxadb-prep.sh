@@ -1,0 +1,118 @@
+#!/usr/bin/env bash
+#
+# Script to build taxonomy database for Taxoner
+# from the genome_lineage file of PATRIC
+#
+#PBS -W group_list=bhurwitz
+#PBS -q standard
+#PBS -l select=1:ncpus=2:mem=12gb
+#PBS -l walltime=12:00:00
+#PBS -l cput=12:00:00
+#PBS -M scottdaniel@email.arizona.edu
+#PBS -m ea
+#PBS -j oe
+#PBS -o out/
+
+cd $PBS_O_WORKDIR
+
+set -u
+
+CONFIG="./config.sh"
+
+if [ -e $CONFIG ]; then
+    . "$CONFIG"
+else
+    echo Missing config \"$CONFIG\" ermagod!
+    exit 12345
+fi
+
+cd $META_DIR
+
+module load singularity
+
+#need the -H switch to redirect the home directory (which is also the working directory)
+#to the same dir of the "genome_lineage" file
+#otherwise, it spits out PATRIC_nodes.txt to your home e.g. /users/whatever
+
+singularity exec -B $META_DIR:$SING_BT2 -H $META_DIR:$HOME /rsgrps/bhurwitz/scottdaniel/singularity-images/taxoner.img PATRIC2nodes_dmp.pl $SING_BT2/genome_lineage
+
+singularity exec -B $META_DIR:$SING_BT2 -H $META_DIR:$HOME /rsgrps/bhurwitz/scottdaniel/singularity-images/taxoner.img PATRICindexGenomes.pl $SING_BT2/genome_lineage
+
+singularity exec -B $META_DIR:$SING_BT2,$GENOME_DIR:$SING_WD -H $META_DIR:$HOME /rsgrps/bhurwitz/scottdaniel/singularity-images/taxoner.img PATRIC2taxonerDB.pl $SING_WD $SING_BT2 $SING_BT2/PATRIC_genomeIndex.txt
+
+rm 0.fasta
+
+#its not pretty but it might just work
+
+#
+#Indexing the PATRIC database
+#============================
+#
+#1) a) Download the "genome_lineage" file from PATRIC database
+#    (wget ftp://ftp.patricbrc.org/patric2/current_release/RELEASE_
+#NOTES/genome_lineage)
+#   b) Place genome_lineage in /data
+#
+#2) Create the PATRIC_nodes.txt file with PATRIC2nodes_dmp.pl
+#    Usage example: perl PATRIC2nodes_dmp.pl ./data/genome_lineage
+#
+#    WARNING: Since PATRIC taxon id: 131567 (named: cellular organisms) is the lowest id, so I added a connection
+#    "131567 \t 1", where the '1' is like the root at the NCBI taxonomy. This is needed, since the taxoner looks for
+#    the root taxon ID.
+#
+#3) Create an index file for organisms with PATRICindexGenomes.pl
+#    Usage example: perl PATRICindexGenomes.pl ./data/genome_lineage
+#
+#    The output is the PATRIC_genomeIndex.txt that contains the PATRIC id of the
+#    genome, followed by the PATRIC taxon, Index id and the parent genome ID. 
+#    The result of taxoner will contain the PATRIC taxon and Index ID, that can be
+#    decoded with this file.
+#
+#4) Creating the taxoner database with PATRIC2taxonerDB.pl:
+#    Usage: perl PATRIC2taxonerDB.pl <PATRIC input> <OUTPUT folder> <Index file> <optional: genom size>
+#
+#    PATRIC input    folder that contains fasta files from PATRIC database
+#            Fasta files can be in any subdir inside specified folder
+#    OUTPUT folder   Folder name, where results should be printed
+#    Index file  Index file created from PATRIC (something like: PATRIC_genomeIndex.txt)
+#    Genome size Optional, set the size of taxoner DB size (in Gb). Default: 4
+#
+#    Example: mkdir db && perl PATRIC2taxonerDB.pl example/ db/ PATRIC_genomeIndex.txt 4
+#
+#    Since a genome can have multiple chromosomes (or scaffolds or contigs), PATRIC2taxonerDB.pl will
+#    create a new genome index file named PATRIC_final_genome_index.txt. Here the chromosome names
+#    are added to the end of the file, with their PATRIC taxon id, unique scaffold id and parental genome ID.
+#
+#    An example:     The E. coli 1000561.3 genome has the following entry:
+#
+#            1000561.3   1000561 18263   1000561.3
+#
+#            Since this genome has multiple scaffolds in it, every scaffold has an entry at the end of the
+#            final index file (PATRIC_final_genome_index.txt), something like this:
+#
+#            accn|AFNF01000001   1000561 33252   1000561.3
+#            accn|AFNF01000002   1000561 33253   1000561.3
+#            accn|AFNF01000003   1000561 33254   1000561.3
+#            accn|AFNF01000004   1000561 33255   1000561.3
+#            accn|AFNF01000005   1000561 33256   1000561.3
+#            accn|AFNF01000006   1000561 33257   1000561.3
+#            accn|AFNF01000007   1000561 33258   1000561.3
+#            accn|AFNF01000008   1000561 33259   1000561.3
+#            accn|AFNF01000009   1000561 33260   1000561.3
+#            accn|AFNF01000123   1000561 33374   1000561.3
+#
+#            All scaffolds have the same taxon ID (1000561), unique id (eg.33252), and are connected to the
+#            parental genome (1000561.3). With this annotation, you can identify the original organism, as well
+#            as the scaffold, wwhere the reads where aligned. So if you look at the taxoner output:
+#
+#            testread    1000561 33374   1.000   481 585
+#
+#            you can see that the read named "testread" aligned to organism: 1000561, scaffold: 33374 (translated
+#            to accn|AFNF01000123) at alignment starting position 481, alignment ending position: 585.
+#
+#5) Index Taxoner database files with bowtie2
+#    Usage:  bowtie2-build <input fasta> <input base index>
+#    Example:  bowtie2-build db/0.fasta db/0.fasta
+#
+#6) Running taxoner:
+#    example: ./taxoner64 -d db/ -s /example/test.fastq -o test -n PATRIC_nodes.txt
