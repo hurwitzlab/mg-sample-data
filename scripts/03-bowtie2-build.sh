@@ -26,7 +26,7 @@ cd $PRJ_DIR
 
 export LIST="fna_list"
 
-find $BT2_DIR -iname "*.fa" > $LIST
+find $BT2_DIR -iname "*.fasta" > $LIST
 
 export TODO="files_todo"
 
@@ -46,7 +46,11 @@ NUM_FILES=$(lc $TODO)
 
 echo Found \"$NUM_FILES\" files in \"$BT2_DIR\" to work on
 
-JOB=$(qsub -J 1-$NUM_FILES:$STEP_SIZE -V -N bowtie2build -j oe -o "$STDOUT_DIR" $WORKER_DIR/bowtie2-build.sh)
+if [ $NUM_FILES -eq 1 ]; then
+    JOB=$(qsub -V -N bowtie2build -j oe -o "$STDOUT_DIR" $WORKER_DIR/bowtie2-build-single.sh)
+else
+    JOB=$(qsub -J 1-$NUM_FILES:$STEP_SIZE -V -N bowtie2build -j oe -o "$STDOUT_DIR" $WORKER_DIR/bowtie2-build.sh)
+fi
 
 if [ $? -eq 0 ]; then
   echo -e "Submitted job \"$JOB\" for you in steps of \"$STEP_SIZE.\"
