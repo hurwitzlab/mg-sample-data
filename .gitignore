@@ -115,3 +115,5 @@ scripts/out/
 fna_list
 PATRIC_nodes.txt
 PATRIC_genomeIndex.txt
+PATRIC_final_genome_index.txt
+fasta_files.txt
