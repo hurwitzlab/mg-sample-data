@@ -15,7 +15,7 @@ else
 fi
 
 export CWD="$PWD"
-export STEP_SIZE=2
+export STEP_SIZE=1
 
 PROG=`basename $0 ".sh"`
 STDOUT_DIR="$CWD/out/$PROG"
@@ -28,11 +28,11 @@ else
     mkdir -p "$TAXONER_DIR"
 fi
 
-cd $TRIMMED_DIR
+cd $DNA_DIR
 
-export LIST="$PRJ_DIR/fna_list"
+export LIST="$PRJ_DIR/fa_list"
 
-find ./ -type f -iname "*val_1.fq.gz" | sed "s/^\.\///" | sort > $LIST
+find ./ -type f -iname "*val_1.fq" | sed "s/^\.\///" | sort > $LIST
 
 export TODO="$PRJ_DIR/files_todo"
 

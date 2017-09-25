@@ -20,9 +20,12 @@ export PRJ_DIR=$BIND
 export SCRIPT_DIR="$PRJ_DIR/scripts"
 export WORKER_DIR="$SCRIPT_DIR/workers"
 
-#dna and rna reads
+#dna and rna reads (this is also where reports and trimmed reads go)
 export DNA_DIR="$PRJ_DIR/dna"
 export RNA_DIR="$PRJ_DIR/rna"
+
+#taxoner out dir
+export TAXONER_DIR="$PRJ_DIR/taxoner_out"
 
 #PATRIC bacterial genomes
 export GENOME_DIR="$PRJ_DIR/genomes"
