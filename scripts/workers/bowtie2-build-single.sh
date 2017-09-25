@@ -3,8 +3,8 @@
 #PBS -W group_list=bhurwitz
 #PBS -q standard
 #PBS -l select=1:ncpus=2:mem=12gb
-#PBS -l walltime=72:00:00
-#PBS -l cput=72:00:00
+#PBS -l walltime=00:30:00
+#PBS -l cput=00:30:00
 #PBS -M scottdaniel@email.arizona.edu
 #PBS -m ea
 #PBS -j oe
@@ -36,11 +36,7 @@ echo Host \"$(hostname)\"
 
 echo Started $(date)
 
-TMP_FILES=$(mktemp)
-
-get_lines $TODO $TMP_FILES $PBS_ARRAY_INDEX $STEP_SIZE
-
-NUM_FILES=$(lc $TMP_FILES)
+NUM_FILES=$(lc $TODO)
 
 if [[ $NUM_FILES -lt 1 ]]; then
     echo Something went wrong or no files to process
@@ -57,7 +53,7 @@ cd $BT2_DIR
 
 echo "Running bowti2-build from within the singularity container"
 
-for file in $(cat $TMP_FILES); do
+for file in $(cat $PRJ_DIR/$TODO); do
     BASE=$(basename $file)
     $bt2build $SING_WD/$BASE $SING_WD/$BASE
 done
