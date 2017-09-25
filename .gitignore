@@ -113,3 +113,5 @@ files_todo
 rna_fastq_file_list
 scripts/out/
 fna_list
+PATRIC_nodes.txt
+PATRIC_genomeIndex.txt

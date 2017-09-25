@@ -34,13 +34,12 @@ module load singularity
 #to the same dir of the "genome_lineage" file
 #otherwise, it spits out PATRIC_nodes.txt to your home e.g. /users/whatever
 
-singularity exec -B $META_DIR:$SING_BT2 -H $META_DIR:$HOME /rsgrps/bhurwitz/scottdaniel/singularity-images/taxoner.img PATRIC2nodes_dmp.pl $SING_BT2/genome_lineage
+singularity exec -B $META_DIR:$SING_META -H $META_DIR:$HOME /rsgrps/bhurwitz/scottdaniel/singularity-images/taxoner.img PATRIC2nodes_dmp.pl $SING_META/lineage_snippet
 
-singularity exec -B $META_DIR:$SING_BT2 -H $META_DIR:$HOME /rsgrps/bhurwitz/scottdaniel/singularity-images/taxoner.img PATRICindexGenomes.pl $SING_BT2/genome_lineage
+singularity exec -B $META_DIR:$SING_META -H $META_DIR:$HOME /rsgrps/bhurwitz/scottdaniel/singularity-images/taxoner.img PATRICindexGenomes.pl $SING_META/lineage_snippet
 
-singularity exec -B $META_DIR:$SING_BT2,$GENOME_DIR:$SING_WD -H $META_DIR:$HOME /rsgrps/bhurwitz/scottdaniel/singularity-images/taxoner.img PATRIC2taxonerDB.pl $SING_WD $SING_BT2 $SING_BT2/PATRIC_genomeIndex.txt
-
-rm 0.fasta
+#this one specifies an OUT_DIR so no need for -H
+singularity exec -B $META_DIR:$SING_META,$GENOME_DIR:$SING_WD /rsgrps/bhurwitz/scottdaniel/singularity-images/taxoner.img PATRIC2taxonerDB.pl $SING_WD $SING_BT2 $SING_META/PATRIC_genomeIndex.txt
 
 #its not pretty but it might just work
 

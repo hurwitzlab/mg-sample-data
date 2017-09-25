@@ -3,9 +3,14 @@
 
 #singularity images to run programs
 export SING_IMG="/rsgrps/bhurwitz/scottdaniel/singularity-images"
+#singularity directories subject to change
+#common to all
 export SING_WD="/work"
+#in taxoner.img and bowcuff.img
 export SING_BT2="/bt2"
+#in taxoner.img
 export SING_META="/metadata"
+export SING_PRJ="/scripts"
 
 #main project directory and also where singularity images bind /work to
 export BIND="/rsgrps/bhurwitz/scottdaniel/mg-sample-data"
