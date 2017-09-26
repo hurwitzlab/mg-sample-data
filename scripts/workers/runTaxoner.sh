@@ -51,9 +51,9 @@ else
     echo Found \"$NUM_FILES\" files to process
 fi
 
-export taxoner="singularity exec \
+export taxoner="singularity run \
     -B $DNA_DIR:$SING_WD,$BT2_DIR:$SING_BT2,$META_DIR:$SING_META \
-    $SING_IMG/taxoner.img taxoner64" 
+    $SING_IMG/taxoner.img" 
 
 cd $DNA_DIR
 
