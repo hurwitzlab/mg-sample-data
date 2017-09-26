@@ -2,18 +2,24 @@
 
 #PBS -W group_list=bhurwitz
 #PBS -q standard
-#PBS -l select=1:ncpus=12:mem=72gb
-#PBS -l walltime=24:00:00
-#PBS -l cput=288:00:00
+#PBS -l select=1:ncpus=6:mem=36gb
+#PBS -l walltime=1:00:00
+#PBS -l cput=6:00:00
 #PBS -M scottdaniel@email.arizona.edu
 #PBS -m ea
 #PBS -j oe
 
 #make sure this matches ncpus in the above header!
-export THREADS="--threads 12"
+export THREADS="--threads 6"
 #
 # runs taxoner
 #
+
+# --------------------------------------------------
+# singularity is needed to run singularity images
+module load singularity
+# --------------------------------------------------
+
 unset module
 set -u
 
@@ -45,35 +51,31 @@ else
     echo Found \"$NUM_FILES\" files to process
 fi
 
-cd $SRA_DIR
+export taxoner="singularity exec \
+    -B $DNA_DIR:$SING_WD,$BT2_DIR:$SING_BT2,$META_DIR:$SING_META \
+    $SING_IMG/taxoner.img taxoner64" 
 
-echo "Running taxoner on "$(cat $TMP_FILES)""
+cd $DNA_DIR
 
-#debugging for now
-set -x
+echo "Running taxoner from within the singularity container"
 
 for file in $(cat $TMP_FILES); do
 
-    BASE=$(basename $file _1_val_1.fq.gz)
-    R1="$BASE"_1_val_1.fq.gz
-    R2="$BASE"_2_val_2.fq.gz
-    OUT_DIR=$TAXONER_DIR/$BASE
+    BASE=$(basename $file _R1_val_1.fq)
+    R1="$BASE"_R1_val_1.fq
+    R2="$BASE"_R2_val_2.fq
+    OUT_DIR=$SING_WD/taxoner_out/$BASE
 
-    if [ ! -d $OUT_DIR ]; then
-        mkdir -p $OUT_DIR
-    fi
+    mkdir -p $TAXONER_DIR/$BASE
 
-#-l tells it to use large (>4gb bowtie2indices or forced with --large-index)
 #-A gets all alignment info like CIGAR style alignment score etc.
-    taxoner64 $THREADS \
-        -l \
+    $taxoner $THREADS \
         -A \
-        --dbPath $BT2_DIR \
-        --taxpath $META_DIR/PATRIC_nodes.txt \
-        --seq $TRIMMED_DIR/$R1 \
-        --paired $TRIMMED_DIR/$R2 \
-        --output $OUT_DIR \
-        -y $SRA_DIR/extra_commands.txt
+        --dbPath $SING_BT2 \
+        --taxpath $SING_META/PATRIC_nodes.txt \
+        --seq $SING_WD/$R1 \
+        --paired $SING_WD/$R2 \
+        --output $OUT_DIR
 
 done
 

@@ -25,7 +25,7 @@ export DNA_DIR="$PRJ_DIR/dna"
 export RNA_DIR="$PRJ_DIR/rna"
 
 #taxoner out dir
-export TAXONER_DIR="$PRJ_DIR/taxoner_out"
+export TAXONER_DIR="$DNA_DIR/taxoner_out"
 
 #PATRIC bacterial genomes
 export GENOME_DIR="$PRJ_DIR/genomes"

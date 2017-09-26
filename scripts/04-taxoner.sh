@@ -59,7 +59,7 @@ done < $LIST
 
 NUM_FILES=$(lc $TODO)
 
-echo Found \"$NUM_FILES\" files in \"$TRIMMED_DIR\" to work on
+echo Found \"$NUM_FILES\" files in \"$DNA_DIR\" to work on
 
 JOB=$(qsub -J 1-$NUM_FILES:$STEP_SIZE -V -N taxoner64 -j oe -o "$STDOUT_DIR" $WORKER_DIR/runTaxoner.sh)
 
