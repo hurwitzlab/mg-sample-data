@@ -68,8 +68,10 @@ for file in $(cat $TMP_FILES); do
 
     mkdir -p $TAXONER_DIR/$BASE
 
-#-A gets all alignment info like CIGAR style alignment score etc.
+    #-l or --largeGenome uses BT2 large >4gb indices
+    #-A gets all alignment info like CIGAR style alignment score etc.
     $taxoner $THREADS \
+        -l \
         -A \
         --dbPath $SING_BT2 \
         --taxpath $SING_META/PATRIC_nodes.txt \
