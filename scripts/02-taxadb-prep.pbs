@@ -38,7 +38,6 @@ singularity exec -B $META_DIR:$SING_META -H $META_DIR:$HOME /rsgrps/bhurwitz/sco
 
 singularity exec -B $META_DIR:$SING_META -H $META_DIR:$HOME /rsgrps/bhurwitz/scottdaniel/singularity-images/taxoner.img PATRICindexGenomes.pl $SING_META/lineage_snippet
 
-#this one specifies an OUT_DIR so no need for -H
 singularity exec -B $META_DIR:$SING_META,$GENOME_DIR:$SING_WD,$BT2_DIR:$SING_BT2 -H $META_DIR:$HOME /rsgrps/bhurwitz/scottdaniel/singularity-images/taxoner.img PATRIC2taxonerDB.pl $SING_WD $SING_BT2 $SING_META/PATRIC_genomeIndex.txt
 
 #its not pretty but it might just work
