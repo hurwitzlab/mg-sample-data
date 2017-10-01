@@ -2,15 +2,15 @@
 
 #PBS -W group_list=bhurwitz
 #PBS -q standard
-#PBS -l select=1:ncpus=6:mem=36gb
-#PBS -l walltime=1:00:00
-#PBS -l cput=6:00:00
+#PBS -l select=2:ncpus=28:mem=168gb:pcmem=6gb
+#PBS -l walltime=12:00:00
+#PBS -l cput=336:00:00
 #PBS -M scottdaniel@email.arizona.edu
 #PBS -m ea
 #PBS -j oe
 
 #make sure this matches ncpus in the above header!
-export THREADS="--threads 6"
+export THREADS="--threads 28"
 #
 # runs taxoner
 #
