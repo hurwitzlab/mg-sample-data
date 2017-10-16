@@ -4,11 +4,12 @@
 #sample genomes included in this:
 #patric_id  genome-(genus.species)
 #435591.13  parabacteroides.distasonis
-#511145.180 escheria.coli
+#511145.12 escheria.coli str. K-12 substr. MG1655 (basically the most studied bacterium ever)
 #1379858.3  mucispirillum.schaedleri
-#1590.467 lactobacillus.plantarum
-#1661053.3  pseudomona.sp
-export patric_ids=('435591.13' '511145.180' '1379858.3' '1590.467' '1661053.3') 
+#1590.75 lactobacillus.plantarum 90sk
+#397291.3 lachnospiraceae.bacterium A4
+
+export patric_ids=('435591.13' '511145.12' '1379858.3' '1590.75' '397291.3') 
 
 #singularity images to run programs
 export SING_IMG="/rsgrps/bhurwitz/scottdaniel/singularity-images"
