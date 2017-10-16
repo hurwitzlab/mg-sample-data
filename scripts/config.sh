@@ -1,6 +1,15 @@
 #Config.sh contains commonly used directories
 #and functions if you need them
 
+#sample genomes included in this:
+#patric_id  genome-(genus.species)
+#435591.13  parabacteroides.distasonis
+#511145.180 escheria.coli
+#1379858.3  mucispirillum.schaedleri
+#1590.467 lactobacillus.plantarum
+#1661053.3  pseudomona.sp
+export patric_ids=('435591.13' '511145.180' '1379858.3' '1590.467' '1661053.3') 
+
 #singularity images to run programs
 export SING_IMG="/rsgrps/bhurwitz/scottdaniel/singularity-images"
 #singularity directories subject to change
