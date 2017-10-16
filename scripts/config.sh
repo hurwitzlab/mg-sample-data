@@ -27,21 +27,18 @@ export RNA_DIR="$PRJ_DIR/rna"
 #taxoner out dir
 export TAXONER_DIR="$DNA_DIR/taxoner_out"
 
-#Reference dir
-export REF_DIR="/rsgrps/bhurwitz/hurwitzlab/data/reference"
-
 #PATRIC bacterial genomes
-export GENOME_DIR="$REF_DIR/patric_bacteria"
+export GENOME_DIR="$PRJ_DIR/genomes"
 
 #PATRIC annotation for genomes
-export GFF_DIR="$REF_DIR/patric_annot/gff"
-export CDSTAB_DIR="$REF_DIR/patric_annot/cdsTab"
+export GFF_DIR="$PRJ_DIR/annotation/gff"
+export CDSTAB_DIR="$PRJ_DIR/annotation/cdsTab"
 
 #PATRIC metadata (taxonomic lineage, genome_length, isolation_site, etc.)
-export META_DIR="$REF_DIR/patric_metadata"
+export META_DIR="$PRJ_DIR/metadata"
 
 #PATRIC bowtie2 directory (for bowtie2 genome indices)
-export BT2_DIR="$REF_DIR/patric_bowtie2_index"
+export BT2_DIR="$PRJ_DIR/bt2_indces"
 
 #
 #

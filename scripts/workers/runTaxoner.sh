@@ -2,15 +2,15 @@
 
 #PBS -W group_list=bhurwitz
 #PBS -q standard
-#PBS -l select=1:ncpus=28:mem=168gb:pcmem=6gb
-#PBS -l walltime=12:00:00
-#PBS -l cput=336:00:00
+#PBS -l select=1:ncpus=6:mem=24gb:pcmem=6gb
+#PBS -l walltime=2:00:00
+#PBS -l cput=12:00:00
 #PBS -M scottdaniel@email.arizona.edu
 #PBS -m ea
 #PBS -j oe
 
 #make sure this matches ncpus in the above header!
-export THREADS="--threads 28"
+export THREADS="--threads 6"
 #
 # runs taxoner
 #
@@ -71,7 +71,6 @@ for file in $(cat $TMP_FILES); do
     #-l or --largeGenome uses BT2 large >4gb indices
     #-A gets all alignment info like CIGAR style alignment score etc.
     $taxoner $THREADS \
-        -l \
         -A \
         --dbPath $SING_BT2 \
         --taxpath $SING_META/PATRIC_nodes.txt \
