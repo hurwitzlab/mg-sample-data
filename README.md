@@ -15,18 +15,10 @@
 
   Two samples of paired (R1,R2) 100bp reads (matched to dna)
   
-* /annotation
-
-  Annotation from Patric in tab-delimited and gff formats
-  
-* /genomes
-
-  Two bacterial reference genomes from Patric
-  
-* /metadata
- 
-  Metadata of genomes including their taxonomic lineage
-  
 * /scripts
 
-  Sample scripts
+  Sample scripts to be run with a PBS scheduling system on HPCs/HTCs
+  
+* /scripts/workers
+
+  "Worker" scripts that are launch by jobs on HPCs/HTCs. Can be modified to run interactively.
