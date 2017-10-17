@@ -10,7 +10,6 @@ unset module
 set -u
 source ./config.sh
 export CWD="$PWD"
-export STEP_SIZE=1 #adjust as needed
 
 echo Setting up log files...
 PROG=`basename $0 ".sh"`
@@ -27,10 +26,8 @@ fi
 export SAMPLE_LIST="$PRJ_DIR/sample_list"
 
 echo \
-"DNA_1
-DNA_2
-DNA_3
-DNA_4" > $SAMPLE_LIST
+"DNA_cancer
+DNA_control" > $SAMPLE_LIST
 
 while read SAMPLE; do
     echo "Doing "$SAMPLE" taxonomy file"
