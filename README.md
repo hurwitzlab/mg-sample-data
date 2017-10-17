@@ -3,8 +3,6 @@
 
 *The dna / rna is mouse cecal matter that contains mouse, mouse chow and microbial nucleotide sequences*
 
-*The genomes and annotation are from [Patric](https://www.patricbrc.org/)*
-
 ## explanation of directories / files
 
 * /dna
