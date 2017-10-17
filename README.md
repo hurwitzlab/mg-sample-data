@@ -9,29 +9,29 @@
 
 * /dna
 
-  Two samples of 2500 paired (R1,R2) 100bp reads (cancer and control)
+  Two samples of 2500 paired (R1,R2) 100bp reads (cancer and control).
   
 * /rna
 
-  Two samples of 2500 paired (R1,R2) 100bp reads (matched to dna)
+  Two samples of 2500 paired (R1,R2) 100bp reads (matched to dna).
   
 * /annotation
 
-  Annotation from Patric in tab-delimited and gff formats
+  Annotation from Patric in tab-delimited and gff formats.
   
 * /genomes
 
-  Two bacterial reference genomes from Patric
+  Two bacterial reference genomes from Patric.
   
 * /metadata
  
-  Metadata of genomes including their taxonomic lineage
+  Metadata of genomes including their taxonomic lineage.
   
 * /scripts
 
-  Sample scripts to run on PBS scheduling system
+  Sample scripts to run on PBS scheduling system.
 
 * /scripts/workers
 
-  "Worker" scripts that are launched by the jobs running on the HPC/HTC
-  Can be modified to run interactively if needed
+  "Worker" scripts that are launched by the jobs running on the HPC/HTC.
+  Can be modified to run interactively if needed.
