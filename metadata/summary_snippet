@@ -1,6 +1,0 @@
-genome_id	genome_name	taxon_id	genome_length	genome_status	chromosomes	plasmids	contigs	patric_cds	refseq_cds
-435591.13	Parabacteroides distasonis ATCC 8503	435591	4811379	Complete	1	0	0	3914	3850
-511145.12	Escherichia coli str. K-12 substr. MG1655	511145	4639675	Complete	1	0	0	4549	4321
-1379858.3	Mucispirillum schaedleri ASF457	1379858	2314725	WGS	0	0	36	2167	2144
-1590.75	Lactobacillus plantarum 90sk	1590	3371458	WGS			47	3297	2969
-397291.3	Lachnospiraceae bacterium A4	397291	6781837	WGS	0	0	184	6877	6549
