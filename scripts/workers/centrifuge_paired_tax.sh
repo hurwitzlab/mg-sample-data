@@ -3,14 +3,14 @@
 #PBS -W group_list=bhurwitz
 #PBS -q standard
 #PBS -l place=free:shared
-#PBS -l select=1:ncpus=28:mem=168gb:pcmem=6gb
-#PBS -l walltime=24:00:00
-#PBS -l cput=672:00:00
+#PBS -l select=1:ncpus=6:mem=34gb:pcmem=6gb
+#PBS -l walltime=2:00:00
+#PBS -l cput=12:00:00
 #PBS -M scottdaniel@email.arizona.edu
 #PBS -m bea
 
 #make sure this matches ncpus in the above header!
-export THREADS="--threads 28"
+export THREADS="--threads 6"
 #
 # runs centrifuge, brought to you by the good people who brought you bowtie2
 #
@@ -28,12 +28,12 @@ module load singularity
 unset module
 set -u
 
-COMMON="$WORKER_DIR/common.sh"
+CONFIG="$SCRIPT_DIR/config.sh"
 
-if [ -e $COMMON ]; then
-  . "$COMMON"
+if [ -e $CONFIG ]; then
+  . "$CONFIG"
 else
-  echo Missing common \"$COMMON\"
+  echo Missing config \"$CONFIG\"
   exit 1
 fi
 
@@ -56,26 +56,22 @@ else
     echo Found \"$NUM_FILES\" files to process
 fi
 
-#set -x
-
 export cent="singularity exec \
-    -B $SRA_DIR:$SING_WD,$(dirname $CENT_DB):$SING_CENT \
+    -B $DNA_DIR:$SING_WD,$(dirname $CENT_DB):$SING_CENT \
     $SING_IMG/centrifuge.img centrifuge" 
 
-
-#MOVE INTO DIRECTORY CONTAINING SEQUENCE DATA
-cd "$FIXED_DIR"
+mkdir -p $CFUGE_DIR
 
 #RUN CENTRIFUGE ON ALL SEQUENCE FILES FOUND IN FIXED_DIR
 while read FASTA; do
-    BASE=$(basename $FASTA _1_fixed.fq.gz)
-    R1=$SING_WD/$(basename $FIXED_DIR)/$(basename $FASTA)
-    R2=$SING_WD/$(basename $FIXED_DIR)/$(basename $FASTA _1_fixed.fq.gz)_2_fixed.fq.gz
+    BASE=$(basename $FASTA R1.fastq)
+    R1=$SING_WD/$(basename $FASTA)
+    R2=$SING_WD/"$BASE"R2.fastq
     OUT_DIR=$SING_WD/$(basename $CFUGE_DIR)
 
     $cent -x $SING_CENT/$DB -1 $R1 -2 $R2 \
-        -S $OUT_DIR/$BASE-centrifuge_hits.tsv \
-        --report-file $OUT_DIR/$BASE-centrifuge_report.tsv \
+        -S $OUT_DIR/"$BASE"centrifuge_hits.tsv \
+        --report-file $OUT_DIR/"$BASE"centrifuge_report.tsv \
         -$FILE_TYPE \
         --exclude-taxids $EXCLUDE \
         $THREADS

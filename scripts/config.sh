@@ -1,21 +1,12 @@
 #Config.sh contains commonly used directories
 #and functions if you need them
 
-#sample genomes included in this:
-#patric_id  genome-(genus.species)
-#435591.13  parabacteroides.distasonis
-#511145.12 escheria.coli str. K-12 substr. MG1655 (basically the most studied bacterium ever)
-#1379858.3  mucispirillum.schaedleri
-#1590.75 lactobacillus.plantarum 90sk
-#397291.3 lachnospiraceae.bacterium A4
 #Centrifuge Database Name ... up to but not including the ".1.cf"
 export CENT_DB="/rsgrps/bhurwitz/jetjr/cent-db/pre-built/p_compressed+h+v"
 export DB=$(basename $CENT_DB)
 
 #what the name of the singularity centdb would be
 export SING_CENT="/centdb"
-
-export patric_ids=('435591.13' '511145.12' '1379858.3' '1590.75' '397291.3') 
 
 #singularity images to run programs
 export SING_IMG="/rsgrps/bhurwitz/scottdaniel/singularity-images"
@@ -61,6 +52,12 @@ export BT2_DIR="$PRJ_DIR/bt2_indces"
 #fixed read pairs and singletons (if we want them)
 export FIXED_DIR="$PRJ_DIR/fixed"
 
+###CENTRIFUGE STUFF####
+#######################
+
+#centrifuge directory
+export CFUGE_DIR="$DNA_DIR/cfuge"
+
 #Single or Paired End Reads? (single || paired)
 #IMPORTANT: For paired end files see README.md for additional information
 export TYPE="paired"
@@ -68,14 +65,7 @@ export TYPE="paired"
 #FASTA/Q File Extension (common extensions include fasta, fa, fastq, fastq)
 #DO NOT INCLUDE the dot "."
 #xamples : SRR1592394_1_val_1.fq.gz, SRR1592394_2_val_2.fq.gz
-export FILE_EXT="fq.gz"
-
-#Centrifuge Report Out Directory
-export CFUGE_DIR="$SRA_DIR/cfuge"
-
-#Bubble Plot Out Directory
-#IMPORTANT NOTE: Make sure to include the '/' at the end of the path to satisfy R
-export PLOT_OUT="$CFUGE_DIR/plot/"
+export FILE_EXT="fastq"
 
 #Plot file name and title (No spaces, use _)
 export PLOT_FILE="HumanCRCbacteria"
@@ -107,4 +97,29 @@ function init_dir {
 # --------------------------------------------------
 function lc() {
     wc -l $1 | cut -d ' ' -f 1
+}
+
+# --------------------------------------------------
+function get_lines() {
+  FILE=$1
+  OUT_FILE=$2
+  START=${3:-1}
+  STEP=${4:-1}
+
+  if [ -z $FILE ]; then
+    echo No input file
+    exit 1
+  fi
+
+  if [ -z $OUT_FILE ]; then
+    echo No output file
+    exit 1
+  fi
+
+  if [[ ! -e $FILE ]]; then
+    echo Bad file \"$FILE\"
+    exit 1
+  fi
+
+  awk "NR==$START,NR==$(($START + $STEP - 1))" $FILE > $OUT_FILE
 }

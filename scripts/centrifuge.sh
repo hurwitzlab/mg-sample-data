@@ -24,15 +24,15 @@ init_dir "$STDOUT_DIR"
 
 cd $PRJ_DIR
 
-export LIST="fna_list"
+export DNALIST="fna_list"
 
-find $DNA_DIR -iname "*.fastq" > $DNALIST
+find $DNA_DIR -iname "*R1.fastq" > $DNALIST
 
 export TODO="files_todo"
 
-#if [ -e $TODO ]; then
-#    rm $TODO
-#fi
+if [ -e $TODO ]; then
+    rm $TODO
+fi
 #
 #for FASTA in $(cat $LIST); do
 #
@@ -48,7 +48,7 @@ NUM_FILES=$(lc $TODO)
 
 echo Found \"$NUM_FILES\" files in \"$DNA_DIR\" to work on
 
-JOB=$(qsub -J 1-$NUM_FILES:$STEP_SIZE -V -N centrifuge -j oe -o "$STDOUT_DIR" $WORKER_DIR/runCentrifuge.sh)
+JOB=$(qsub -J 1-$NUM_FILES:$STEP_SIZE -V -N centrifuge -j oe -o "$STDOUT_DIR" $WORKER_DIR/centrifuge_paired_tax.sh)
 
 if [ $? -eq 0 ]; then
   echo -e "Submitted job \"$JOB\" for you in steps of \"$STEP_SIZE.\"
