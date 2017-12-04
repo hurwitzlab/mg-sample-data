@@ -1,10 +1,13 @@
 # mg-sample-data
 ## Sample data for a metagenomic / metatranscriptomic workflow.
 
-*The dna / rna is mouse cecal matter that contains mouse, mouse chow and microbial nucleotide sequences* 
+*The dna / rna is mouse cecal matter that contains mouse, mouse chow and microbial nucleotide sequences.* 
+
 [Full data is here.](https://www.ncbi.nlm.nih.gov/sra?linkname=bioproject_sra_all&from_uid=379709)
 
-*Centrifuge database of bacteria available [here](ftp://ftp.ccb.jhu.edu/pub/infphilo/centrifuge/data/p_compressed+h+v.tar.gz)* CAUTION: ~5GB file.
+Centrifuge database of bacteria available here -- ftp://ftp.ccb.jhu.edu/pub/infphilo/centrifuge/data/p_compressed+h+v.tar.gz 
+
+CAUTION: ~5GB file.
 
 ## explanation of directories / files
 
