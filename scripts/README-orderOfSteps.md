@@ -1,8 +1,9 @@
 # Order of operations
 ## Can pre-pend script names to 00, 01, etc. once finalized
 
-* sort-and-convert-read.sh
 * centrifuge.sh
+
+
 * quick-rename-and-move.pbs
     * move "centrifuge_reports.tsv" to local directory
     * interactive_centrifuge_bubble.R

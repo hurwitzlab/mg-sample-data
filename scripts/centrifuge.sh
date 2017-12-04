@@ -30,21 +30,23 @@ find $DNA_DIR -iname "*.fastq" > $DNALIST
 
 export TODO="files_todo"
 
-if [ -e $TODO ]; then
-    rm $TODO
-fi
+#if [ -e $TODO ]; then
+#    rm $TODO
+#fi
+#
+#for FASTA in $(cat $LIST); do
+#
+#    if [ ! -e ""$FASTA".rev.2.bt2" ]; then
+#        echo $FASTA >> $TODO
+#    fi
+#
+#done
 
-for FASTA in $(cat $LIST); do
-
-    if [ ! -e ""$FASTA".rev.2.bt2" ]; then
-        echo $FASTA >> $TODO
-    fi
-
-done
+cat $DNALIST >> $TODO
 
 NUM_FILES=$(lc $TODO)
 
-echo Found \"$NUM_FILES\" files in \"$BT2_DIR\" to work on
+echo Found \"$NUM_FILES\" files in \"$DNA_DIR\" to work on
 
 JOB=$(qsub -J 1-$NUM_FILES:$STEP_SIZE -V -N centrifuge -j oe -o "$STDOUT_DIR" $WORKER_DIR/runCentrifuge.sh)
 
