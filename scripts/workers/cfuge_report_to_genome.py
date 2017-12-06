@@ -11,6 +11,7 @@
 
 import ncbi_genome_download as ngd
 import pandas as pd
+from plumbum import local
 
 #WIP
 
@@ -22,3 +23,6 @@ report = pd.read_table('DNA_cancer_centrifuge_report.tsv',delimiter='\t')
 for row in report.itertuples(index=True, name='Pandas'):
     if getattr(row, 'abundance') > 0:
         print getattr(row, 'taxID')
+
+#example ncbi_genome_download
+ngd.download(group='bacteria',taxid='235279',human_readable=True)
