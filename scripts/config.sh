@@ -2,7 +2,7 @@
 #and functions if you need them
 
 #Centrifuge Database Name ... up to but not including the ".1.cf"
-export CENT_DB="/rsgrps/bhurwitz/jetjr/cent-db/pre-built/p_compressed+h+v"
+export CENT_DB="/rsgrps/bhurwitz/hurwitzlab/data/reference/cent_db/uncompressed/p+h+v"
 export DB=$(basename $CENT_DB)
 
 #what the name of the singularity centdb would be
