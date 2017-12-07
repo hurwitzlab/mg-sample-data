@@ -31,9 +31,6 @@ export WORKER_DIR="$SCRIPT_DIR/workers"
 export DNA_DIR="$PRJ_DIR/dna"
 export RNA_DIR="$PRJ_DIR/rna"
 
-#taxoner out dir
-export TAXONER_DIR="$DNA_DIR/taxoner_out"
-
 #krona out dir
 export KRONA_OUT_DIR="$DNA_DIR/krona_out"
 
@@ -51,6 +48,8 @@ export META_DIR="$PRJ_DIR/metadata"
 export BT2_DIR="$PRJ_DIR/bt2_indces"
 #fixed read pairs and singletons (if we want them)
 export FIXED_DIR="$PRJ_DIR/fixed"
+
+export TESTFILE="/rsgrps/bhurwitz/scottdaniel/mg-sample-data/dna/cfuge/DNA_control_centrifuge_report.tsv"
 
 ###CENTRIFUGE STUFF####
 #######################

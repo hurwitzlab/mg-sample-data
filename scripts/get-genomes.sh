@@ -24,11 +24,11 @@ init_dir "$STDOUT_DIR"
 
 cd $PRJ_DIR
 
-export CFUGELIST="report_list"
+export CFUGELIST="$PRJ_DIR/report_list"
 
 find $CFUGE_DIR -iname "*report.tsv" > $CFUGELIST
 
-export TODO="files_todo"
+export TODO="$PRJ_DIR/files_todo"
 
 if [ -e $TODO ]; then
     rm $TODO
@@ -36,13 +36,13 @@ fi
 
 #TODO: optional logic to check if file has been processed
 
-cat $CFUGLIST >> $TODO
+cat $CFUGELIST >> $TODO
 
 NUM_FILES=$(lc $TODO)
 
 echo Found \"$NUM_FILES\" files in \"$CFUGE_DIR\" to work on
 
-JOB=$(qsub -J 1-$NUM_FILES:$STEP_SIZE -V -N get-genomes -j oe -o "$STDOUT_DIR" $WORKER_DIR/cfuge_report_to_genome.py)
+JOB=$(qsub -J 1-$NUM_FILES:$STEP_SIZE -V -N get-genomes -j oe -o "$STDOUT_DIR" $WORKER_DIR/runCfugeToGenomes.sh)
 
 if [ $? -eq 0 ]; then
   echo -e "Submitted job \"$JOB\" for you in steps of \"$STEP_SIZE.\"
