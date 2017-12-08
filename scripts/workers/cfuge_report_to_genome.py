@@ -6,8 +6,13 @@ import sys
 import argparse
 import os
 import errno
-import ncbi_genome_download as ngd
+#import ncbi_genome_download as ngd
+#using plumbum instead of ncbi_genome_download
+#to just call the script
+from plumbum import local
 import pandas as pd
+
+ngd = local["ncbi-genome-download"]
 
 if __name__ == "__main__":
     parser = \
@@ -24,6 +29,7 @@ for row in report.itertuples(index=True, name='Pandas'):
     if getattr(row, 'abundance') > 0:
         print("Downloading {:s} taxid {:d}".format(\
                 getattr(row, 'name'), getattr(row, 'taxID')))
-        ngd.download(group='bacteria',taxid=getattr(row, 'taxID'), \
-                human_readable=True)
+        ngd("--human-readable","--taxid",getattr(row, 'taxID'),"bacteria")
+#        ngd.download(group='bacteria',taxid=getattr(row, 'taxID'), \
+#                human_readable=True)
 
