@@ -1,6 +1,11 @@
 #Config.sh contains commonly used directories
 #and functions if you need them
 
+export SAMPLE_NAMES="cancer control"
+
+# place to put temp stuff like lists of files
+export TEMP_DIR="$PRJ_DIR/tmp"
+
 #Centrifuge Database Name ... up to but not including the ".1.cf"
 export CENT_DB="/rsgrps/bhurwitz/hurwitzlab/data/reference/cent_db/uncompressed/p+h+v"
 export DB=$(basename $CENT_DB)
@@ -49,8 +54,10 @@ export GENOME_DIR="$PRJ_DIR/genomes/refseq/bacteria"
 #NCBI_REFSEQ bowtie2 directory (for bowtie2 genome indices)
 export BT2_DIR="$PRJ_DIR/bt2_index"
 
+#bowtie2 output ALN = alignments
+export ALN_DIR="$PRJ_DIR/alignments"
 
-export TESTFILE="/rsgrps/bhurwitz/scottdaniel/mg-sample-data/dna/cfuge/DNA_control_centrifuge_report.tsv"
+#export TESTFILE="/rsgrps/bhurwitz/scottdaniel/mg-sample-data/dna/cfuge/DNA_control_centrifuge_report.tsv"
 
 ###CENTRIFUGE STUFF####
 #######################
