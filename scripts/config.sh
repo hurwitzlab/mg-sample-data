@@ -32,22 +32,23 @@ export DNA_DIR="$PRJ_DIR/dna"
 export RNA_DIR="$PRJ_DIR/rna"
 
 #krona out dir
-export KRONA_OUT_DIR="$DNA_DIR/krona_out"
+#export KRONA_OUT_DIR="$DNA_DIR/krona_out"
 
-#PATRIC bacterial genomes
-export GENOME_DIR="$PRJ_DIR/genomes"
+#NCBI_REFSEQ bacterial genomes
+export GENOME_DIR="$PRJ_DIR/genomes/refseq/bacteria"
 
-#PATRIC annotation for genomes
-export GFF_DIR="$PRJ_DIR/annotation/gff"
-export CDSTAB_DIR="$PRJ_DIR/annotation/cdsTab"
 
-#PATRIC metadata (taxonomic lineage, genome_length, isolation_site, etc.)
-export META_DIR="$PRJ_DIR/metadata"
+#NCBI_REFSEQ annotation for genomes
+#*NOTE*: putting gffs with the genomes for simplicity (since there are so few)
+#export GFF_DIR="$PRJ_DIR/annotation/gff"
+#export CDSTAB_DIR="$PRJ_DIR/annotation/cdsTab"
 
-#PATRIC bowtie2 directory (for bowtie2 genome indices)
-export BT2_DIR="$PRJ_DIR/bt2_indces"
-#fixed read pairs and singletons (if we want them)
-export FIXED_DIR="$PRJ_DIR/fixed"
+#NCBI_REFSEQ metadata (taxonomic lineage, genome_length, isolation_site, etc.)
+#export META_DIR="$PRJ_DIR/metadata"
+
+#NCBI_REFSEQ bowtie2 directory (for bowtie2 genome indices)
+export BT2_DIR="$PRJ_DIR/bt2_index"
+
 
 export TESTFILE="/rsgrps/bhurwitz/scottdaniel/mg-sample-data/dna/cfuge/DNA_control_centrifuge_report.tsv"
 
@@ -63,12 +64,12 @@ export TYPE="paired"
 
 #FASTA/Q File Extension (common extensions include fasta, fa, fastq, fastq)
 #DO NOT INCLUDE the dot "."
-#xamples : SRR1592394_1_val_1.fq.gz, SRR1592394_2_val_2.fq.gz
+#examples : SRR1592394_1_val_1.fq.gz, SRR1592394_2_val_2.fq.gz
 export FILE_EXT="fastq"
 
 #Plot file name and title (No spaces, use _)
-export PLOT_FILE="HumanCRCbacteria"
-export PLOT_TITLE="HumanCRCbacteria"
+#export PLOT_FILE="HumanCRCbacteria"
+#export PLOT_TITLE="HumanCRCbacteria"
 
 #File type (Fasta or Fastq | fasta = f; fastq = q)
 export FILE_TYPE="q"

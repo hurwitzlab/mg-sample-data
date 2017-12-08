@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
-#script to cat all the genomes
-#and then build a bowtie2-index from them for mapping
+#script to extract the gzipped gbff's and then get gff and fasta from them
 
 unset module
 set -u
@@ -21,7 +20,11 @@ STDOUT_DIR="$CWD/out/$PROG"
 
 init_dir "$STDOUT_DIR"
 
-JOB=$(qsub -V -N bowtie2-build -j oe -o "$STDOUT_DIR" $WORKER_DIR/run-bowtie2-build.sh)
+export TODO="$PRJ_DIR/gbff_todo"
+
+find $GENOME_DIR -iname "*.gbff.gz" > $TODO
+
+JOB=$(qsub -V -N extract -j oe -o "$STDOUT_DIR" $WORKER_DIR/runExtract.sh)
 
 if [ $? -eq 0 ]; then
     echo Submitted job \"$JOB\" for you. Weeeeeeeeeeeee!
