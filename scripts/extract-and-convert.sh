@@ -14,13 +14,14 @@ else
     exit 12385
 fi
 
+mkdir -p $TEMP_DIR
 PROG=`basename $0 ".sh"`
 #Just going to put stdout and stderr together into stdout
 STDOUT_DIR="$CWD/out/$PROG"
 
 init_dir "$STDOUT_DIR"
 
-export TODO="$PRJ_DIR/gbff_todo"
+export TODO="$TEMP_DIR/gbff_todo"
 
 find $GENOME_DIR -iname "*.gbff.gz" > $TODO
 

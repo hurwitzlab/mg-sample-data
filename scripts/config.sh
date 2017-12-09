@@ -20,6 +20,8 @@ export SING_IMG="/rsgrps/bhurwitz/scottdaniel/singularity-images"
 export SING_WD="/work"
 #in taxoner.img and bowcuff.img
 export SING_BT2="/bt2"
+#in bowcuff.img for bowtie2 output
+export SING_OUT="/out"
 #in taxoner.img
 export SING_META="/metadata"
 export SING_PRJ="/scripts"

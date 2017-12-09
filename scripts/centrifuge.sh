@@ -14,6 +14,7 @@ else
     exit 12345
 fi
 
+mkdir -p $TEMP_DIR
 export CWD="$PWD"
 export STEP_SIZE=1
 
@@ -24,11 +25,11 @@ init_dir "$STDOUT_DIR"
 
 cd $PRJ_DIR
 
-export DNALIST="fna_list"
+export DNALIST="$TEMP_DIR/fna_list"
 
 find $DNA_DIR -iname "*R1.fastq" > $DNALIST
 
-export TODO="files_todo"
+export TODO="$TEMP_DIR/files_todo"
 
 if [ -e $TODO ]; then
     rm $TODO

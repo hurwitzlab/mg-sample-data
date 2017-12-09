@@ -14,6 +14,7 @@ else
     exit 12345
 fi
 
+mkdir -p $TEMP_DIR
 export CWD="$PWD"
 export STEP_SIZE=1
 
@@ -24,11 +25,11 @@ init_dir "$STDOUT_DIR"
 
 cd $PRJ_DIR
 
-export CFUGELIST="$PRJ_DIR/report_list"
+export CFUGELIST="$TEMP_DIR/report_list"
 
 find $CFUGE_DIR -iname "*report.tsv" > $CFUGELIST
 
-export TODO="$PRJ_DIR/files_todo"
+export TODO="$TEMP_DIR/files_todo"
 
 if [ -e $TODO ]; then
     rm $TODO
