@@ -123,3 +123,6 @@ test/
 cfuge/
 report_list
 genomes/
+alignments/
+bt2_index/
+tmp/
