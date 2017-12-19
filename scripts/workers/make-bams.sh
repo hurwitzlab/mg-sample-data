@@ -18,7 +18,7 @@ module load singularity
 
 cd $ALN_DIR
 
-samtools="singularity exec -B $BT2_DIR:$SING_BT2,$ALN_DIR:$SING_WD \
+samtools="singularity exec -B $BT2_DIR:/media,$ALN_DIR:$SING_WD \
     $SING_IMG/pythonFaves.img \
     samtools"
 
@@ -26,18 +26,19 @@ echo Converting $SAMPLE using reference $GENOME
 
 for SAM in $(cat $SAM_LIST); do
 
-    REALG="$SING_BT2/$GENOME"
+    REALG="/media/$GENOME"
     BASE="$SING_WD/$SAMPLE/$(basename $SAM .sam)"
+    OUT="$ALN_DIR/$SAMPLE/$(basename $SAM .sam)"
 
-    $samtools view -@ 12 -bT $REALG $BASE.sam > $BASE.temp
+    $samtools view -@ 12 -bT $REALG $BASE.sam > $OUT.temp
 
     echo Sorting $SAMPLE
 
-    $samtools sort -@ 12 $BASE.temp > $BASE.bam
+    $samtools sort -@ 12 $BASE.temp > $OUT.bam
 
     echo Removing $SAMPLE.temp
 
-    rm $SAMPLE/$(basename $SAM .sam).temp
+    rm $OUT.temp
 
 done
 
