@@ -26,6 +26,9 @@ mkdir -p $BT2_DIR
 echo Putting together all the fastas
 find $GENOME_DIR -iname "*.fa" | xargs -I fasta cat fasta > $BT2_DIR/all.fa
 
+echo Need to create a big gff file too
+find $GENOME_DIR -iname "*.gff" | xargs -I gff cat gff > $BT2_DIR/all.gff
+
 JOB=$(qsub -V -N bowtie2-build -j oe -o "$STDOUT_DIR" $WORKER_DIR/run-bowtie2-build.sh)
 
 if [ $? -eq 0 ]; then

@@ -56,6 +56,7 @@ export GENOME_DIR="$PRJ_DIR/genomes/refseq/bacteria"
 #NCBI_REFSEQ bowtie2 directory (for bowtie2 genome indices)
 export BT2_DIR="$PRJ_DIR/bt2_index"
 export GENOME="all.fa"
+export GFF="all.gff"
 
 #bowtie2 output ALN = alignments
 export ALN_DIR="$PRJ_DIR/alignments"
