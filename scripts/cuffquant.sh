@@ -1,35 +1,40 @@
 #!/usr/bin/env bash
 
 #
-# This script is intended to make bams from sams and then sort
+# This script is intended quantify reads using cuffquant from the tuxedo suite
 #
 #echo "Number of arguments is $#"
 unset module
-set -u
 source ./config.sh
-export CWD="$PWD"
-export STEP_SIZE=1
 
-if [[ $# = 0 ]]; then
-    echo "Need to know what sam output directory to work on"
-    echo "e.g. ./07-cuffquant.sh \$MOUSE_OUT"
-    echo "ALSO: did you source config.sh?"
-    exit 1
-fi
-
-echo Setting up log files...
+CWD=$(pwd)
 PROG=`basename $0 ".sh"`
-#Just going to put stdout and stderr together into stdout
 STDOUT_DIR="$CWD/out/$PROG"
 
-init_dir "$STDOUT_DIR/$(basename $1)"
+init_dir "$STDOUT_DIR"
 
-echo Submitting job...
+mkdir -p $TEMP_DIR
 
-for i in $SAMPLE_NAMES; do
-    export SAMDIR=$1
-    export SAMPLE=$i
-    echo $i
-    qsub -V -j oe -o "$STDOUT_DIR/$(basename $1)" $WORKER_DIR/cuffquant.sh
+cd $ALN_DIR
+
+for sample in $SAMPLE_NAMES; do
+
+    export SAMPLE=$sample
+    export BAM_LIST="$TEMP_DIR"/$sample-bam_todo
+
+    find . -type f -regextype 'sed' -iregex "\.\/.*$sample.*bam" \
+        > $BAM_LIST
+
+    echo "Counting hits to genes in $sample sample"
+
+	JOB=$(qsub -V -N cuffquant -j oe -o "$STDOUT_DIR" $WORKER_DIR/runCuffquant.sh)
+
+    if [ $? -eq 0 ]; then
+        echo "Submitted job \"$JOB\" for you.
+        What the hell, go ahead and put all your eggs in one basket."
+    else
+        echo -e "\nError submitting job\n$JOB\n"
+    fi
+
 done
 

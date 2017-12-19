@@ -1,10 +1,9 @@
 #!/usr/bin/env bash
 
 #PBS -W group_list=bhurwitz
-#PBS -q qualified
+#PBS -q standard
 #PBS -l select=1:ncpus=12:mem=72gb
-###and the amount of time required to run it
-#PBS -l walltime=24:00:00
+#PBS -l walltime=03:00:00
 #PBS -l cput=36:00:00
 #PBS -M scottdaniel@email.arizona.edu
 #PBS -m bea
@@ -15,50 +14,32 @@ fi
 
 set -u
 
-COMMON="$WORKER_DIR/common.sh"
+module load singularity
 
-if [ -e $COMMON ]; then
-  . "$COMMON"
-else
-  echo Missing common \"$COMMON\"
-  exit 1
-fi
+cd $ALN_DIR
 
-set -x
-
-if [ $SAMDIR == $MOUSE_OUT ]; then
-    GFF=$MOUSEGFF
-elif [ $SAMDIR == $BFRAG_OUT ]; then
-    GFF=$BFRAGGFF
-elif [ $SAMDIR == $ALLBACT_OUT ]; then
-    export GFF=$ALLGFF
-    export rRNAGFF=$ALLrRNAGFF
-elif [ $SAMDIR == $COMB_OUT ]; then
-    export GFF=$COMBGFF
-    export rRNAGFF=$COMBrRNAGFF
-elif [ $SAMDIR == $UNK_OUT ]; then
-    export GFF=$UNKGFF
-    export rRNAGFF=$UNKrRNAGFF
-fi
-
-cd $SAMDIR
-
-echo Running cuffdiff with gff $GFF in $SAMDIR
+echo Running cuffdiff with gff $GFF in $BT2_DIR
 echo With sample "$SAMPLE".bam
 
-#export ALLBAMS="$SAMDIR/allbams"
-
-#find $SAMDIR -iname \*.bam -print | sort > $ALLBAMS
-
-if [[ ! -d "$SAMPLE"-cuffquant-out ]]; then
-    mkdir -p "$SAMPLE"-cuffquant-out
+if [[ ! -d "$SAMPLE"/cuffquant-out ]]; then
+    mkdir -p "$SAMPLE"/cuffquant-out
 else
-    rm "$SAMPLE"-cuffquant-out/*
+    rm "$SAMPLE"/cuffquant-out/*
 fi
 
-time cuffquant -p 12 \
-    -o "$SAMPLE"-cuffquant-out \
-    -M $rRNAGFF \
-    --quiet \
-    --no-length-correction \
-    $GFF "$SAMPLE".bam
+cuffquant="singularity exec \
+    -B $BT2_DIR:$SING_BT2,$ALN_DIR:$SING_WD \
+    $SING_IMG/bowcuff.img cuffquant"
+
+for BAM in $(cat $BAM_LIST); do
+
+    BASE="$SING_WD/$SAMPLE/$(basename $BAM)"
+    OUT_DIR="$SING_WD/$SAMPLE/cuffquant-out"
+
+    time $cuffquant -p 12 \
+        -o $OUT_DIR \
+        -M $SING_BT2/$RRNAGFF \
+        --quiet \
+        $SING_BT2/$GFF $BASE
+
+done
