@@ -6,4 +6,4 @@
 * extract-and-convert.sh
 * cat-and-bt2-build.sh
 * align-with-bowtie2.sh
-
+* convert-to-bam.sh
