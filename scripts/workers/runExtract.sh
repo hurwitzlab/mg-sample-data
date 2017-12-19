@@ -27,6 +27,8 @@ echo Started $(date)
 
 cd $GENOME_DIR
 
+module load singularity
+
 for FILE in $(cat $TODO); do
 
     echo Working on report $(basename $FILE)
@@ -35,9 +37,13 @@ for FILE in $(cat $TODO); do
     DIR=$(dirname $FILE)
     BASE=$(basename $FILE .gbff.gz)
 
+    togff="singularity exec \
+        -B $DIR:$SING_WD \
+        $SING_IMG/pythonFaves.img to-gff"
+
     gunzip $FILE
 
-    to-gff --getfasta $DIR/$BASE.gbff $DIR/$BASE.gff
+    $togff --getfasta $SING_WD/$BASE.gbff $SING_WD/$BASE.gff
 
 done
 
