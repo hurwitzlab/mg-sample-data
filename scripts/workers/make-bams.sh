@@ -14,15 +14,31 @@ fi
 
 set -u
 
+module load singularity
+
+cd $ALN_DIR
+
+samtools="singularity exec -B $BT2_DIR:$SING_BT2,$ALN_DIR:$SING_WD \
+    $SING_IMG/pythonFaves.img \
+    samtools"
+
 echo Converting $SAMPLE using reference $GENOME
 
-samtools view -@ 12 -bT $GENOME $SAMPLE.sam > $SAMPLE.temp
+for SAM in $(cat $SAM_LIST); do
 
-echo Sorting $SAMPLE
+    REALG="$SING_BT2/$GENOME"
+    BASE="$SING_WD/$SAMPLE/$(basename $SAM .sam)"
 
-samtools sort -@ 12 $SAMPLE.temp > $SAMDIR/$SAMPLE.bam
+    $samtools view -@ 12 -bT $REALG $BASE.sam > $BASE.temp
 
-echo Removing $SAMPLE.temp
+    echo Sorting $SAMPLE
 
-rm $SAMPLE.temp
+    $samtools sort -@ 12 $BASE.temp > $BASE.bam
 
+    echo Removing $SAMPLE.temp
+
+    rm $SAMPLE/$(basename $SAM .sam).temp
+
+done
+
+echo DONE at $(date)
