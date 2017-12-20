@@ -27,7 +27,7 @@ else
     rm -r cuffnorm-out/*
 fi
 
-cuffquant="singularity exec \
+cuffnorm="singularity exec \
     -B $BT2_DIR:$SING_BT2,$ALN_DIR:$SING_WD \
     $SING_IMG/bowcuff.img cuffnorm"
 
