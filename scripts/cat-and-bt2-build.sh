@@ -24,12 +24,11 @@ init_dir "$STDOUT_DIR"
 mkdir -p $BT2_DIR
 
 echo Putting together all the fastas
-find $GENOME_DIR -iname "*.fa" | xargs -I fasta cat fasta > $BT2_DIR/all.fa
+find $GENOME_DIR -iname "*.fna" | xargs -I fasta cat fasta > $BT2_DIR/all.fa
 
 echo Need to create a big gff file too
 find $GENOME_DIR -iname "*.gff" | xargs -I gff cat gff > $BT2_DIR/gfftemp
-cat $BT2_DIR/gfftemp > $BT2_DIR/all.gff
-#grep -P "\tCDS\t" $BT2_DIR/gfftemp > $BT2_DIR/all.gff
+grep -P "\tCDS\t" $BT2_DIR/gfftemp > $BT2_DIR/allCDS.gff
 grep -P "\trRNA\t" $BT2_DIR/gfftemp > $BT2_DIR/rRNA.gff
 rm $BT2_DIR/gfftemp
 

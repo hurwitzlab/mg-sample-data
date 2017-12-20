@@ -4,7 +4,7 @@
 #PBS -q standard
 #PBS -l select=1:ncpus=12:mem=72gb
 ###and the amount of time required to run it
-#PBS -l walltime=24:00:00
+#PBS -l walltime=03:00:00
 #PBS -l cput=36:00:00
 #PBS -M scottdaniel@email.arizona.edu
 #PBS -m bea
@@ -15,37 +15,11 @@ fi
 
 set -u
 
-COMMON="$WORKER_DIR/common.sh"
+module load singularity
 
-if [ -e $COMMON ]; then
-  . "$COMMON"
-else
-  echo Missing common \"$COMMON\"
-  exit 1
-fi
+cd $ALN_DIR
 
-if [ $SAMDIR == $MOUSE_OUT ]; then
-    GFF=$MOUSEGFF
-elif [ $SAMDIR == $BFRAG_OUT ]; then
-    GFF=$BFRAGGFF
-elif [ $SAMDIR == $ALLBACT_OUT ]; then
-    export GFF=$ALLGFF
-    export rRNAGFF=$ALLrRNAGFF
-elif [ $SAMDIR == $COMB_OUT ]; then
-    export GFF=$COMBGFF
-    export rRNAGFF=$COMBrRNAGFF
-elif [ $SAMDIR == $UNK_OUT ]; then
-    export GFF=$UNKGFF
-    export rRNAGFF=$UNKrRNAGFF
-fi
-
-cd $SAMDIR
-
-echo Running cuffdiff with gff $GFF in $SAMDIR
-
-export ALLCXBS="$SAMDIR/allcxbs"
-
-find $SAMDIR -iname \*.cxb -print | sort > $ALLCXBS
+echo Running cuffdiff with gff $GFF in $ALN_DIR
 
 if [[ ! -d cuffnorm-out ]]; then
     mkdir -p cuffnorm-out
@@ -53,7 +27,12 @@ else
     rm -r cuffnorm-out/*
 fi
 
-time cuffnorm -p 12 --labels S1,S2,S3,S4 \
-    -o combined-cuffnorm-out \
+cuffquant="singularity exec \
+    -B $BT2_DIR:$SING_BT2,$ALN_DIR:$SING_WD \
+    $SING_IMG/bowcuff.img cuffnorm"
+
+#need to manually set labels
+time $cuffnorm -p 12 --labels "cancer","control" \
+    -o $SING_WD/cuffnorm-out \
     --quiet \
-    $GFF $(cat $ALLCXBS)
+    $SING_BT2/$GFF $(cat $CXB_LIST)

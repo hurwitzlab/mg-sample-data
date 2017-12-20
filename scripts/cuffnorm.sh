@@ -4,28 +4,32 @@
 # This script is intended to run cuffnorm
 #
 unset module
-set -u
 source ./config.sh
-export CWD="$PWD"
 
-if [[ $# = 0 ]]; then
-    echo "Need to know what sam output directory to work on"
-    echo "e.g. ./07-cuffquant.sh \$MOUSE_OUT"
-    echo "ALSO: did you source config.sh?"
-    exit 1
-fi
-
-
-echo Setting up log files...
-
+CWD=$(pwd)
 PROG=`basename $0 ".sh"`
-#Just going to put stdout and stderr together into stdout
 STDOUT_DIR="$CWD/out/$PROG"
 
-init_dir "$STDOUT_DIR/$(basename $1)"
+init_dir "$STDOUT_DIR"
 
-echo Submitting job...
+mkdir -p $MY_TEMP_DIR
 
-export SAMDIR=$1
+cd $ALN_DIR
 
-qsub -V -j oe -o "$STDOUT_DIR/$(basename $1)" $WORKER_DIR/cuffnorm.sh
+export CXB_LIST="$MY_TEMP_DIR"/$sample-cxb_todo
+
+find . -type f -regextype 'sed' -iregex "\.\/.*cxb" \
+    > $CXB_LIST
+
+sed -i "s-\.-$SING_WD-" $CXB_LIST
+
+echo "Normalizing hits to \"real\" counts"
+
+JOB=$(qsub -V -N cuffnorm -j oe -o "$STDOUT_DIR" $WORKER_DIR/runCuffnorm.sh)
+
+if [ $? -eq 0 ]; then
+    echo "Submitted job \"$JOB\" for you.
+    What the hell, go ahead and put all your eggs in one basket."
+else
+    echo -e "\nError submitting job\n$JOB\n"
+fi

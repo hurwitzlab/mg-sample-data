@@ -13,14 +13,14 @@ STDOUT_DIR="$CWD/out/$PROG"
 
 init_dir "$STDOUT_DIR"
 
-mkdir -p $TEMP_DIR
+mkdir -p $MY_TEMP_DIR
 
 cd $ALN_DIR
 
 for sample in $SAMPLE_NAMES; do
 
     export SAMPLE=$sample
-    export SAM_LIST="$TEMP_DIR"/$sample-sam_todo
+    export SAM_LIST="$MY_TEMP_DIR"/$sample-sam_todo
 
     find . -type f -regextype 'sed' -iregex "\.\/.*$sample.*sam" \
         > $SAM_LIST

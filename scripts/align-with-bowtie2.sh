@@ -11,14 +11,14 @@ STDOUT_DIR="$CWD/out/$PROG"
 
 init_dir "$STDOUT_DIR"
 
-mkdir -p $TEMP_DIR
+mkdir -p $MY_TEMP_DIR
 
 cd $RNA_DIR
 
 for sample in $SAMPLE_NAMES; do
 
     export SAMPLE=$sample
-    export FASTQ_LIST="$TEMP_DIR"/$sample-fastq_todo
+    export FASTQ_LIST="$MY_TEMP_DIR"/$sample-fastq_todo
     export BT2="$BT2_DIR"/all
     export OUT="$ALN_DIR/$sample"
 

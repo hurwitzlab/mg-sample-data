@@ -4,7 +4,7 @@
 export SAMPLE_NAMES="cancer control"
 
 # place to put temp stuff like lists of files
-export TEMP_DIR="$PRJ_DIR/tmp"
+export MY_TEMP_DIR="$PRJ_DIR/lists_of_files"
 
 #Centrifuge Database Name ... up to but not including the ".1.cf"
 export CENT_DB="/rsgrps/bhurwitz/hurwitzlab/data/reference/cent_db/uncompressed/p+h+v"
@@ -56,7 +56,7 @@ export GENOME_DIR="$PRJ_DIR/genomes"
 #NCBI_REFSEQ bowtie2 directory (for bowtie2 genome indices)
 export BT2_DIR="$PRJ_DIR/bt2_index"
 export GENOME="all.fa"
-export GFF="all.gff"
+export GFF="allCDS.gff"
 export RRNAGFF="rRNA.gff"
 
 #bowtie2 output ALN = alignments
