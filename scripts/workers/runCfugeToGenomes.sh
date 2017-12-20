@@ -25,6 +25,8 @@ echo Host \"$(hostname)\"
 
 echo Started $(date)
 
+mkdir -p $GENOME_DIR
+
 cd $GENOME_DIR
 
 for REPORT in $(cat $TODO); do
@@ -32,6 +34,10 @@ for REPORT in $(cat $TODO); do
     echo Working on report $REPORT
 
     python $WORKER_DIR/cfuge_report_to_genome.py -r $REPORT
+    
+    echo Unzipping gotten fastas and gffs
+
+    find ./ -iname "*.gz" | xargs -I file gunzip file
 
 done
 

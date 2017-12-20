@@ -42,7 +42,7 @@ export RNA_DIR="$PRJ_DIR/rna"
 #export KRONA_OUT_DIR="$DNA_DIR/krona_out"
 
 #NCBI_REFSEQ bacterial genomes
-export GENOME_DIR="$PRJ_DIR/genomes/refseq/bacteria"
+export GENOME_DIR="$PRJ_DIR/genomes"
 
 
 #NCBI_REFSEQ annotation for genomes

@@ -29,7 +29,6 @@ for row in report.itertuples(index=True, name='Pandas'):
     if getattr(row, 'abundance') > 0:
         print("Downloading {:s} taxid {:d}".format(\
                 getattr(row, 'name'), getattr(row, 'taxID')))
-        ngd("--human-readable","--taxid",getattr(row, 'taxID'),"bacteria")
-#        ngd.download(group='bacteria',taxid=getattr(row, 'taxID'), \
-#                human_readable=True)
+        ngd("--human-readable","--format","fasta","--taxid",getattr(row, 'taxID'),"bacteria")
+        ngd("--human-readable","--format","gff","--taxid",getattr(row, 'taxID'),"bacteria")
 
