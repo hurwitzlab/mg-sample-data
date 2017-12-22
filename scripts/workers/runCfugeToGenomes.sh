@@ -26,6 +26,19 @@ echo Host \"$(hostname)\"
 
 echo Started $(date)
 
+TMP_FILES=$(mktemp)
+
+get_lines $TODO $TMP_FILES $PBS_ARRAY_INDEX $STEP_SIZE
+
+NUM_FILES=$(lc $TMP_FILES)
+
+if [[ $NUM_FILES -lt 1 ]]; then
+    echo Something went wrong or no files to process
+    exit 1
+else
+    echo Found \"$NUM_FILES\" files to process
+fi
+
 mkdir -p $GENOME_DIR
 
 cd $GENOME_DIR
@@ -47,7 +60,7 @@ cd $GENOME_DIR
 
 export p3="singularity exec $SING_IMG/p3-tools.img"
 
-for REPORT in $(cat $TODO); do
+while read REPORT; do
 
     echo Working on report $REPORT
 
@@ -67,7 +80,8 @@ for REPORT in $(cat $TODO); do
         echo "Species is $name"
 
 #not using -e species,"$name" 
-        while read patricID; do 
+
+        for patricID in $($p3 p3-all-genomes -e taxon_id,"$taxon_id" -e genome_status,"Complete" | egrep -v "genome"); do
 
             echo "Getting PATRIC genome_id $patricID in fasta and Refseq gff formats"
 
@@ -84,10 +98,10 @@ for REPORT in $(cat $TODO); do
 
             fi
 
-        done < $($p3 p3-all-genomes -e taxon_id,"$taxon_id" -e genome_status,"Complete" | egrep -v "genome")
+        done
 
     done < $TEMPFILE
 
-done
+done < $TMP_FILES
 
 echo Done at $(date)
