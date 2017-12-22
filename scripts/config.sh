@@ -1,5 +1,13 @@
 #Config.sh contains commonly used directories
 #and functions if you need them
+#main project directory and also where singularity images bind /work to
+export BIND="/rsgrps/bhurwitz/scottdaniel/mg-sample-data"
+export PRJ_DIR=$BIND
+
+#scripts and such
+export SCRIPT_DIR="$PRJ_DIR/scripts"
+export WORKER_DIR="$SCRIPT_DIR/workers"
+
 
 export SAMPLE_NAMES="cancer control"
 
@@ -25,14 +33,6 @@ export SING_OUT="/out"
 #in taxoner.img
 export SING_META="/metadata"
 export SING_PRJ="/scripts"
-
-#main project directory and also where singularity images bind /work to
-export BIND="/rsgrps/bhurwitz/scottdaniel/mg-sample-data"
-export PRJ_DIR=$BIND
-
-#scripts and such
-export SCRIPT_DIR="$PRJ_DIR/scripts"
-export WORKER_DIR="$SCRIPT_DIR/workers"
 
 #dna and rna reads (this is also where reports and trimmed reads go)
 export DNA_DIR="$PRJ_DIR/dna"
