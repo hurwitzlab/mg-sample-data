@@ -28,8 +28,8 @@ find $GENOME_DIR -iname "*.fna" | xargs -I fasta cat fasta > $BT2_DIR/all.fa
 
 echo Need to create a big gff file too
 find $GENOME_DIR -iname "*.gff" | xargs -I gff cat gff > $BT2_DIR/gfftemp
-grep -P "\tCDS\t" $BT2_DIR/gfftemp > $BT2_DIR/allCDS.gff
-grep -P "\trRNA\t" $BT2_DIR/gfftemp > $BT2_DIR/rRNA.gff
+grep -P "\tCDS\t" $BT2_DIR/gfftemp | sort -u > $BT2_DIR/allCDS.gff 
+grep -P "\trRNA\t" $BT2_DIR/gfftemp | sort -u > $BT2_DIR/rRNA.gff #added sort -u because apparently there are duplicates
 rm $BT2_DIR/gfftemp
 
 JOB=$(qsub -V -N bowtie2-build -j oe -o "$STDOUT_DIR" $WORKER_DIR/run-bowtie2-build.sh)

@@ -98,6 +98,10 @@ while read REPORT; do
                 wget -nc -nd -r --no-parent -A '*.PATRIC.gff' \
                     ftp://ftp.patricbrc.org/patric2/patric3/genomes/"$patricID"
 
+                #naturally this will give an error if it does not exist
+                #but we can ignore that
+                rm "$patricID".RefSeq.gff &> /dev/null
+
             fi
 
         done
