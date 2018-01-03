@@ -7,3 +7,4 @@
 * align-with-bowtie2.sh
 * convert-to-bam.sh
 * cuffquant.sh
+* cuffnorm.sh
