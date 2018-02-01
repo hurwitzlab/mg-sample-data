@@ -85,18 +85,15 @@ while read REPORT; do
 
             echo "Getting PATRIC genome_id $patricID in fasta and Refseq gff formats"
 
-            wget -nc -nd -r --no-parent -A '*.fna' \
-                ftp://ftp.patricbrc.org/patric2/patric3/genomes/"$patricID"
+            wget ftp://ftp.patricbrc.org/genomes/"$patricID"/"$patricID".fna
             
-            wget -nc -nd -r --no-parent -A '*.RefSeq.gff' \
-                ftp://ftp.patricbrc.org/patric2/patric3/genomes/"$patricID"
+            wget ftp://ftp.patricbrc.org/genomes/"$patricID"/"$patricID".RefSeq.gff
 
             #if the RefSeq.gff does not exist or it is too small (usually just means its just a header and nothing else) we get the PATRIC.gff
             if [[ ( ! -e "$patricID".RefSeq.gff ) || \
                 ( $(lc "$patricID".RefSeq.gff) -lt 5 ) ]]; then
                 
-                wget -nc -nd -r --no-parent -A '*.PATRIC.gff' \
-                    ftp://ftp.patricbrc.org/patric2/patric3/genomes/"$patricID"
+                wget ftp://ftp.patricbrc.org/genomes/"$patricID"/"$patricID".PATRIC.gff
 
                 #naturally this will give an error if it does not exist
                 #but we can ignore that
