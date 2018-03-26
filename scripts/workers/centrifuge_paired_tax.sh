@@ -3,14 +3,14 @@
 #PBS -W group_list=bhurwitz
 #PBS -q standard
 #PBS -l place=free:shared
-#PBS -l select=1:ncpus=6:mem=34gb:pcmem=6gb
-#PBS -l walltime=2:00:00
-#PBS -l cput=12:00:00
+#PBS -l select=1:ncpus=12:mem=68gb:pcmem=6gb
+#PBS -l walltime=12:00:00
+#PBS -l cput=144:00:00
 #PBS -M scottdaniel@email.arizona.edu
 #PBS -m bea
 
 #make sure this matches ncpus in the above header!
-export THREADS="--threads 6"
+export THREADS="--threads 12"
 #
 # runs centrifuge, brought to you by the good people who brought you bowtie2
 #
@@ -43,11 +43,11 @@ echo Host \"$(hostname)\"
 
 echo Started $(date)
 
-TMP_FILES=$(mktemp)
+LEFT_TMP_FILES=$(mktemp)
 
-get_lines $TODO $TMP_FILES $PBS_ARRAY_INDEX $STEP_SIZE
+get_lines $FILES_TO_PROCESS $LEFT_TMP_FILES $PBS_ARRAY_INDEX $STEP_SIZE
 
-NUM_FILES=$(lc $TMP_FILES)
+NUM_FILES=$(lc $LEFT_TMP_FILES)
 
 if [[ $NUM_FILES -lt 1 ]]; then
     echo Something went wrong or no files to process
@@ -56,27 +56,75 @@ else
     echo Found \"$NUM_FILES\" files to process
 fi
 
-export cent="singularity exec \
-    -B $DNA_DIR:$SING_WD,$(dirname $CENT_DB):$SING_CENT \
-    $SING_IMG/centrifuge.img centrifuge" 
-
+#Singularity images aren't working right now!!!
+#export cent="singularity exec \
+#    -B $DNA_DIR:$SING_WD,$(dirname $CENT_DB):$SING_CENT \
+#    $SING_IMG/centrifuge.img centrifuge" 
+#
 mkdir -p $CFUGE_DIR
 
+#Singularity images aren't working right now!!!
+#while read FASTA; do
+#    BASE=$(basename $FASTA R1.fastq)
+#    R1=$SING_WD/$(basename $FASTA)
+#    R2=$SING_WD/"$BASE"R2.fastq
+#    OUT_DIR=$SING_WD/$(basename $CFUGE_DIR)
+#
+#    $cent -x $SING_CENT/$DB -1 $R1 -2 $R2 \
+#        -S $OUT_DIR/"$BASE"centrifuge_hits.tsv \
+#        --report-file $OUT_DIR/"$BASE"centrifuge_report.tsv \
+#        -$FILE_TYPE \
+#        --exclude-taxids $EXCLUDE \
+#        $THREADS
+#
+#done < $TMP_FILES
+
+while read LEFT_FASTQ; do
+
+    test1=$(echo $LEFT_FASTQ | sed s/_R[1-2]//)
+
+    while read RIGHT_FASTQ; do
+
+        test2=$(echo $RIGHT_FASTQ | sed s/_R[1-2]//)
+
+        if [ "$test1" = "$test2" ]; then
+            R1=$LEFT_FASTQ
+            R2=$RIGHT_FASTQ
+
+            OUT_DIR=$CFUGE_DIR
+
+            if [[ ! -d "$OUT_DIR" ]]; then
+                mkdir -p "$OUT_DIR"
+            fi
+
+            centrifuge -x $CENT_DB -1 $R1 -2 $R2 \
+                -S $OUT_DIR/"$test1"_centrifuge_hits.tsv \
+                --report-file $OUT_DIR/"$test1"_centrifuge_report.tsv \
+                -$FILE_TYPE \
+                --exclude-taxids $EXCLUDE \
+                $THREADS
+        fi
+
+    done < "$RIGHT_FILES_LIST"
+
+done < "$LEFT_TMP_FILES"
+ 
 #RUN CENTRIFUGE ON ALL SEQUENCE FILES FOUND IN FIXED_DIR
-while read FASTA; do
-    BASE=$(basename $FASTA R1.fastq)
-    R1=$SING_WD/$(basename $FASTA)
-    R2=$SING_WD/"$BASE"R2.fastq
-    OUT_DIR=$SING_WD/$(basename $CFUGE_DIR)
-
-    $cent -x $SING_CENT/$DB -1 $R1 -2 $R2 \
-        -S $OUT_DIR/"$BASE"centrifuge_hits.tsv \
-        --report-file $OUT_DIR/"$BASE"centrifuge_report.tsv \
-        -$FILE_TYPE \
-        --exclude-taxids $EXCLUDE \
-        $THREADS
-
-done < $TMP_FILES
+#while read FASTA; do
+#    BASE=$(basename $FASTA R1.fastq)
+#    R1=$DNA_DIR/$(basename $FASTA)
+#    R2=$DNA_DIR/"$BASE"R2.fastq
+#    OUT_DIR=$CFUGE_DIR
+#
+#    centrifuge -x $CENT_DB -1 $R1 -2 $R2 \
+#        -S $OUT_DIR/"$BASE"_centrifuge_hits.tsv \
+#        --report-file $OUT_DIR/"$BASE"_centrifuge_report.tsv \
+#        -$FILE_TYPE \
+#        --exclude-taxids $EXCLUDE \
+#        $THREADS
+#
+#done < $TMP_FILES
+#
 
 #CREATE BUBBLE PLOT VISUALIZATION
 #just do this interactively later

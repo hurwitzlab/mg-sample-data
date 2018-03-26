@@ -1,7 +1,7 @@
 #Config.sh contains commonly used directories
 #and functions if you need them
 #main project directory and also where singularity images bind /work to
-export BIND="/rsgrps/bhurwitz/scottdaniel/mg-sample-data"
+export BIND="/rsgrps/bhurwitz/scottdaniel/radoct"
 export PRJ_DIR=$BIND
 
 #scripts and such
@@ -9,7 +9,7 @@ export SCRIPT_DIR="$PRJ_DIR/scripts"
 export WORKER_DIR="$SCRIPT_DIR/workers"
 
 
-export SAMPLE_NAMES="cancer control"
+export SAMPLE_NAMES="DNA_1 DNA_2 DNA_3 DNA_4"
 
 # place to put temp stuff like lists of files
 export MY_TEMP_DIR="$PRJ_DIR/lists_of_files"
@@ -35,8 +35,9 @@ export SING_META="/metadata"
 export SING_PRJ="/scripts"
 
 #dna and rna reads (this is also where reports and trimmed reads go)
-export DNA_DIR="$PRJ_DIR/dna"
-export RNA_DIR="$PRJ_DIR/rna"
+export MOUSE_DATA="/rsgrps/bhurwitz/hurwitzlab/data/raw/Doetschman_20111007/all"
+export DNA_DIR="$MOUSE_DATA/dna"
+export RNA_DIR="$MOUSE_DATA/rna"
 
 #krona out dir
 #export KRONA_OUT_DIR="$DNA_DIR/krona_out"
@@ -68,7 +69,7 @@ export ALN_DIR="$PRJ_DIR/alignments"
 #######################
 
 #centrifuge directory
-export CFUGE_DIR="$DNA_DIR/cfuge"
+export CFUGE_DIR="$PRJ_DIR/cfuge"
 
 #Single or Paired End Reads? (single || paired)
 #IMPORTANT: For paired end files see README.md for additional information

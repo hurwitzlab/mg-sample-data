@@ -16,7 +16,7 @@ fi
 
 mkdir -p $MY_TEMP_DIR
 export CWD="$PWD"
-export STEP_SIZE=1
+export STEP_SIZE=10
 
 PROG=`basename $0 ".sh"`
 STDOUT_DIR="$CWD/out/$PROG"
@@ -25,16 +25,23 @@ init_dir "$STDOUT_DIR"
 
 cd $PRJ_DIR
 
-export DNALIST="$MY_TEMP_DIR/fna_list"
+export LEFT_FILES_LIST="$MY_TEMP_DIR/sorted_left_fastqs"
+export RIGHT_FILES_LIST="$MY_TEMP_DIR/sorted_right_fastqs"
 
-find $DNA_DIR -iname "*R1.fastq" > $DNALIST
+echo "Finding fastq's"
 
-export TODO="$MY_TEMP_DIR/files_todo"
+find $DNA_DIR -type f -iname \*R1*fastq | sed "s/^\.\///" | sort > $LEFT_FILES_LIST 
+find $DNA_DIR -type f -iname \*R2*fastq | sed "s/^\.\///" | sort > $RIGHT_FILES_LIST 
 
-if [ -e $TODO ]; then
-    rm $TODO
+echo "Checking if already processed"
+
+if [ -e $MY_TEMP_DIR/files-to-process ]; then
+    rm $MY_TEMP_DIR/files-to-process
 fi
-#
+
+export FILES_TO_PROCESS="$MY_TEMP_DIR/files-to-process"
+
+
 #for FASTA in $(cat $LIST); do
 #
 #    if [ ! -e ""$FASTA".rev.2.bt2" ]; then
@@ -43,9 +50,9 @@ fi
 #
 #done
 
-cat $DNALIST >> $TODO
+cat $LEFT_FILES_LIST >> $FILES_TO_PROCESS
 
-NUM_FILES=$(lc $TODO)
+NUM_FILES=$(lc $FILES_TO_PROCESS)
 
 echo Found \"$NUM_FILES\" files in \"$DNA_DIR\" to work on
 
