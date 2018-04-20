@@ -12,6 +12,7 @@ import errno
 from plumbum import local
 import pandas as pd
 
+#installed like "conda install -c bioconda ncbi-genome-download"
 ngd = local["ncbi-genome-download"]
 
 if __name__ == "__main__":
