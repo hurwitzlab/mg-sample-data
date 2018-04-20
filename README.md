@@ -39,3 +39,8 @@ CAUTION: ~5GB file.
 
   "Worker" scripts that are launched by the jobs running on the HPC/HTC.
   Can be modified to run interactively if needed.
+
+---
+### Reads sampled using sample-reads-randomly.py from the khmer package
+http://khmer.readthedocs.io/en/latest/citations.html
+
