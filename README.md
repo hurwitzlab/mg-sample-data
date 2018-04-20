@@ -43,4 +43,5 @@ CAUTION: ~5GB file.
 ---
 ### Reads sampled using sample-reads-randomly.py from the khmer package
 http://khmer.readthedocs.io/en/latest/citations.html
-
+e.g. sample-reads-randomly.py -N 10000 -S 3 -R 1 --gzip RNA_2_GCCAAT_L008_R1_016.fastq
+and  sample-reads-randomly.py -N 10000 -S 3 -R 1 --gzip RNA_2_GCCAAT_L008_R2_016.fastq
